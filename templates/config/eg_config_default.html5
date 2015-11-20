@@ -1,0 +1,31 @@
+<?php if ($this->addBackendModule): ?>
+/**
+* Backend modules
+*/
+<?php if ($this->insertInExistingModuleGroup): ?>
+$GLOBALS['BE_MOD']['<?= $this->existingModuleGroupName ?>']['<?= $this->dcaName ?>'] = array(
+	'tables' => array('tl_<?= $this->dcaName ?>'),
+	'icon'   => 'system/modules/<?= $this->moduleName ?>/assets/img/icon_<?= $this->dcaName ?>.png'
+);
+<?php else: ?>
+array_insert(
+	$GLOBALS['BE_MOD'],
+	1,
+	array(
+		'<?= $this->moduleName ?>' => array(
+			'<?= $this->dcaName ?>' => array(
+				'tables' => array('tl_<?= $this->dcaName ?>'),
+				'icon'   => 'system/modules/<?= $this->moduleName ?>/assets/img/icon_<?= $this->dcaName ?>.png'
+			)
+		)
+	)
+);
+<?php endif; ?>
+<?php endif; ?>
+
+<?php if ($this->addModels): ?>
+/**
+ * Models
+ */
+$GLOBALS['TL_MODELS']['tl_<?= $this->dcaName ?>'] = '\<?= $this->moduleNamespace ?>\<?= $this->entityClassName ?>Model';
+<?php endif; ?>

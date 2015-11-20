@@ -1,0 +1,216 @@
+$GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
+(
+	'config'   => array
+	(
+		'dataContainer'     => '<?= $this->dataContainer ?>',
+<?php if ($this->parentDcaName): ?>
+		'ptable'            => 'tl_<?= $this->parentDcaName ?>',
+<?php endif; if ($this->childDcaName): ?>
+		'ctable'            => 'tl_<?= $this->childDcaName ?>',
+<?php endif; ?>
+		'enableVersioning'  => <?= $this->enableVersioning ? 'true' : 'false' ?>,
+<?php if ($this->addOnLoadCallbacks): ?>
+		'onload_callback' => array
+		(
+		),
+<?php endif; if (!empty($this->addOnSubmitCallbacks)): ?>
+		'onsubmit_callback' => array
+		(
+		),
+<?php endif; ?>
+		'sql' => array
+		(
+			'keys' => array
+			(
+				'id' => 'primary'
+			)
+		)
+	),
+	'list'     => array
+	(
+		'label' => array(
+			'fields' => array('id')
+		),
+		'sorting'           => array
+		(
+			'mode'                  => <?= $this->sortingMode ?>,
+<?php if ($this->addSortingFields): ?>
+			'fields'                => array(<?php foreach ($this->sortingFields as $intId => $arrField): ?>'<?= $arrField['field'] ?> <?= $arrField['sorting'] ?>'<?php if ($intId != count($this->sortingFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>),
+<?php endif; ?>
+<?php if ($this->addHeaderFields): ?>
+			'headerFields'          => array(<?php foreach ($this->headerFields as $intId => $strField): ?>'<?= $strField ?>'<?php if ($intId != count($this->headerFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>),
+<?php endif; ?>
+			'panelLayout'           => 'filter;search,limit'<?php if ($this->parentDcaName): ?>,
+			'child_record_callback' => array('tl_<?= $this->parentDcaName ?>', 'listChildren')
+<?php endif; ?>
+
+		),
+		'global_operations' => array
+		(
+<?php if ($this->addGlobalOperations) foreach ($this->globalOperations as $strAct): ?>
+<?php if ($strAct == 'all'): ?>
+			'all'    => array
+			(
+				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+				'href'       => 'act=select',
+				'class'      => 'header_edit_all',
+				'attributes' => 'onclick="Backend.getScrollOffset();"'
+			),
+<?php else: ?>
+			'<?= $strAct ?>'    => array
+			(
+				'label'      => &$GLOBALS['TL_LANG']['MSC']['<?= $strAct ?>'],
+				'href'       => 'act=<?= $strAct ?>',
+				'class'      => 'header_<?= $strAct ?>',
+				'attributes' => 'onclick="Backend.getScrollOffset();"'
+			),
+<?php endif ?>
+<?php endforeach ?>
+		),
+		'operations'        => array
+		(
+<?php if ($this->addOperations) foreach ($this->operations as $strAct): ?>
+<?php if ($strAct == 'delete'): ?>
+			'delete' => array
+			(
+				'label'      => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['delete'],
+				'href'       => 'act=delete',
+				'icon'       => 'delete.gif',
+				'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
+			),
+<?php elseif ($strAct == 'toggle'): ?>
+			'toggle' => array
+			(
+				'label'           => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['toggle'],
+				'icon'            => 'visible.gif',
+				'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+				'button_callback' => array('tl_<?= $this->dcaName ?>', 'toggleIcon')
+			),
+<?php else: ?>
+			'<?= $strAct ?>'   => array
+			(
+				'label' => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['<?= $strAct ?>'],
+				'href'  => 'act=<?= $strAct ?>',
+				'icon'  => '<?= $strAct ?>.gif'
+			),
+<?php endif; ?>
+<?php endforeach; ?>
+		)
+	),
+	'palettes' => array(
+		'default' => '<?php if ($this->addPublish): ?>published;<?php endif; ?>'
+	),
+	'fields'   => array
+	(
+		'id' => array
+		(
+			'sql'                     => "int(10) unsigned NOT NULL auto_increment"
+		),
+<?php if ($this->parentDcaName): ?>
+		'pid' => array
+		(
+			'foreignKey'              => 'tl_<?= $this->parentDcaName ?>.<?= $this->parentDcaForeignKey ?>',
+			'sql'                     => "int(10) unsigned NOT NULL default '0'",
+			'relation'                => array('type'=>'belongsTo', 'load'=>'eager')
+		),
+<?php endif; ?>
+		'tstamp' => array
+		(
+			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+		),
+		'dateAdded' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
+			'sorting'                 => true,
+			'flag'                    => 6,
+			'eval'                    => array('rgxp'=>'datim', 'doNotCopy' => true),
+			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+		),
+<?php if ($this->addPublish): ?>
+		'published' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['published'],
+			'exclude'                 => true,
+			'filter'                  => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50', 'doNotCopy'=>true),
+			'sql'                     => "char(1) NOT NULL default '0'"
+		),
+<?php endif; ?>
+	)
+);
+
+
+class tl_<?= $this->dcaName ?> extends \Backend
+{
+
+<?php if ($this->parentDcaName): ?>
+	public function listChildren($arrRow)
+	{
+		return '<div class="tl_content_left">' . $arrRow['id'] . ' <span style="color:#b3b3b3; padding-left:3px">[' .
+				\Date::parse(Config::get('datimFormat'), trim($arrRow['dateAdded'])) . ']</span></div>';
+	}
+
+<?php endif; ?>
+<?php if ($this->addPublish): ?>
+	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+	{
+		$objUser = \BackendUser::getInstance();
+
+		if (strlen(Input::get('tid')))
+		{
+			$this->toggleVisibility(Input::get('tid'), (Input::get('state') == 1));
+			\Controller::redirect($this->getReferer());
+		}
+
+		// Check permissions AFTER checking the tid, so hacking attempts are logged
+		if (!$objUser->isAdmin && !$objUser->hasAccess('tl_<?= $this->dcaName ?>::published', 'alexf'))
+		{
+			return '';
+		}
+
+		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? '' : 1);
+
+		if (!$row['published'])
+		{
+			$icon = 'invisible.gif';
+		}
+
+		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
+	}
+
+	public function toggleVisibility($intId, $blnVisible)
+	{
+		$objUser = \BackendUser::getInstance();
+		$objDatabase = \Database::getInstance();
+
+		// Check permissions to publish
+		if (!$objUser->isAdmin && !$objUser->hasAccess('tl_<?= $this->dcaName ?>::published', 'alexf'))
+		{
+			\Controller::log('Not enough permissions to publish/unpublish item ID "'.$intId.'"', 'tl_<?= $this->dcaName ?> toggleVisibility', TL_ERROR);
+			\Controller::redirect('contao/main.php?act=error');
+		}
+
+		$objVersions = new Versions('tl_<?= $this->dcaName ?>', $intId);
+		$objVersions->initialize();
+
+		// Trigger the save_callback
+		if (is_array($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['fields']['published']['save_callback']))
+		{
+			foreach ($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['fields']['published']['save_callback'] as $callback)
+			{
+				$this->import($callback[0]);
+				$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, $this);
+			}
+		}
+
+		// Update the database
+		$objDatabase->prepare("UPDATE tl_<?= $this->dcaName ?> SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
+			->execute($intId);
+
+		$objVersions->create();
+		\Controller::log('A new version of record "tl_<?= $this->dcaName ?>.id='.$intId.'" has been created'.$this->getParentEntries('tl_<?= $this->dcaName ?>', $intId), 'tl_<?= $this->dcaName ?> toggleVisibility()', TL_GENERAL);
+	}
+<?php endif; ?>
+
+}

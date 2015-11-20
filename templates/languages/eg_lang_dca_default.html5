@@ -1,0 +1,27 @@
+$arrLang = &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>'];
+
+/**
+ * Fields
+ */
+<?php if ($this->addPublish): ?>
+$arrLang['published'] = array('Veröffentlichen', 'Wählen Sie diese Option zum Veröffentlichen.');
+<?php endif; ?>
+
+
+/**
+ * Legends
+ */
+<?php if ($this->addPublish): ?>
+$arrLang['publish_legend'] = 'Veröffentlichung';
+<?php endif; ?>
+
+
+/**
+ * Buttons
+ */
+$arrLang['new'] = array('<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][0], $this->localizedEntityName) ?>', '<?= $GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][1] ?>');
+<?php if ($this->addOperations): ?>
+<?php foreach ($this->operations as $strAct): ?>
+$arrLang['<?= $strAct ?>'] = array('<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][0], $this->localizedEntityName) ?>', '<?= $GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][1] ?>');
+<?php endforeach; ?>
+<?php endif; ?>

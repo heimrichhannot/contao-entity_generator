@@ -1,0 +1,4 @@
+/**
+ * Backend modules
+ */
+$GLOBALS['TL_LANG']['MOD']['<?= $this->moduleName ?>'] = array('<?= $this->localizedModuleName ?>', '');
