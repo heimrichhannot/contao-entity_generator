@@ -100,7 +100,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 		'addHeaderFields' => 'headerFields',
 		'addGlobalOperations' => 'globalOperations',
 		'addOperations' => 'operations',
-		'addLanguages' => 'dcaLangTemplate,modulesLangTemplate,localizedEntityName,localizedModuleName',
+		'addLanguages' => 'dcaLangTemplate,modulesLangTemplate,localizedEntityName,localizedEntityNamePlural,localizedModuleName',
 		'addModels' => 'modelTemplate'
 	),
 
@@ -523,6 +523,14 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'inputType'        => 'text',
 			'eval'             => array('mandatory' => true, 'tl_class' => 'w50'),
 			'sql'              => "varchar(255) NOT NULL default ''",
+		),
+		'localizedEntityNamePlural' => array
+		(
+				'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['localizedEntityNamePlural'],
+				'exclude'          => true,
+				'inputType'        => 'text',
+				'eval'             => array('mandatory' => true, 'tl_class' => 'w50'),
+				'sql'              => "varchar(255) NOT NULL default ''",
 		),
 		'localizedModuleName' => array
 		(

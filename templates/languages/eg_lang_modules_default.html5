@@ -2,3 +2,4 @@
  * Backend modules
  */
 $GLOBALS['TL_LANG']['MOD']['<?= $this->moduleName ?>'] = array('<?= $this->localizedModuleName ?>', '');
+$GLOBALS['TL_LANG']['MOD']['<?= $this->dcaName ?>'] = array('<?= $this->localizedEntityNamePlural ?>', '');
