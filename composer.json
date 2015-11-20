@@ -1,9 +1,9 @@
 {
-    "name": "heimrichhannot/contao-competition",
-    "description":"A module for handling competitions with submissions and reviews.",
-    "keywords":["contao", "competition", "review", "module", "developer"],
+    "name": "heimrichhannot/contao-entity_generator",
+    "description":"A module for automatically generating contao entities in a comfortable and extensible way.",
+    "keywords":["contao", "entity", "model", "dca", "generator", "module", "developer"],
     "type": "contao-module",
-    "homepage":"https://github.com/heimrichhannot/contao-competition",
+    "homepage":"https://github.com/heimrichhannot/contao-entity_generator",
     "license":"LGPL-3.0+",
     "authors":[
         {
@@ -14,7 +14,7 @@
         }
     ],
     "support":{
-        "issues":"https://github.com/heimrichhannot/contao-competition/issues"
+        "issues":"https://github.com/heimrichhannot/contao-entity_generator/issues"
     },
     "require": {
         "contao/core": ">=3.2,<4-dev",
@@ -26,7 +26,7 @@
     "extra": {
         "contao": {
             "sources": {
-                "": "system/modules/competition"
+                "": "system/modules/entity_generator"
             }
         }
     }
