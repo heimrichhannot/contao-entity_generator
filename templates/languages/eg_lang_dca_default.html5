@@ -19,9 +19,9 @@ $arrLang['publish_legend'] = 'Veröffentlichung';
 /**
  * Buttons
  */
-$arrLang['new'] = array('<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][0], $this->localizedEntityName) ?>', '<?= $GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][1] ?>');
+$arrLang['new'] = array('<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][0], $this->localizedEntityName) ?>', '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][1], $this->localizedEntityName, '%s') ?>');
 <?php if ($this->addOperations): ?>
 <?php foreach ($this->operations as $strAct): ?>
-$arrLang['<?= $strAct ?>'] = array('<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][0], $this->localizedEntityName) ?>', '<?= $GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][1] ?>');
+$arrLang['<?= $strAct ?>'] = array('<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][0], $this->localizedEntityName) ?>', '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][1], $this->localizedEntityName, '%s') ?>');
 <?php endforeach; ?>
 <?php endif; ?>
