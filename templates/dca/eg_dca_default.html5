@@ -12,10 +12,14 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 <?php if ($this->addOnLoadCallbacks): ?>
 		'onload_callback' => array
 		(
+			<?php foreach ($this->onLoadCallbacks as $intId => $arrCallback): ?>array('<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>')<?php if ($intId != count($this->onLoadCallbacks) - 1): ?>, <?php endif; ?><?php endforeach; ?>
+
 		),
 <?php endif; if (!empty($this->addOnSubmitCallbacks)): ?>
 		'onsubmit_callback' => array
 		(
+			<?php foreach ($this->onSubmitCallbacks as $intId => $arrCallback): ?>array('<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>')<?php if ($intId != count($this->onSubmitCallbacks) - 1): ?>, <?php endif; ?><?php endforeach; ?>
+
 		),
 <?php endif; ?>
 		'sql' => array

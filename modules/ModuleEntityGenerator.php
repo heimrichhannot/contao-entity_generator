@@ -11,6 +11,8 @@ class ModuleEntityGenerator
 
 	protected static $arrMultiColumnWizardFields = array(
 		'sortingFields',
+		'onLoadCallbacks',
+		'onSubmitCallbacks',
 		'headerFields',
 		'globalOperations',
 		'operations'

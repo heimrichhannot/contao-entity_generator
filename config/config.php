@@ -8,3 +8,8 @@ $GLOBALS['BE_MOD']['devtools']['entity_generator'] = array(
 	'generate' => array('HeimrichHannot\EntityGenerator\ModuleEntityGenerator', 'generate'),
 	'icon'   => 'system/modules/entity_generator/assets/img/icon.png',
 );
+
+/**
+ * Models
+ */
+$GLOBALS['TL_MODELS']['tl_entity_template'] = 'HeimrichHannot\EntityGenerator\EntityTemplateModel';

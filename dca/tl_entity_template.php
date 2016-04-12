@@ -93,7 +93,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 		'addConfig' => 'configTemplate,addBackendModule',
 		'addBackendModule' => 'insertInExistingModuleGroup',
 		'insertInExistingModuleGroup' => 'existingModuleGroupName',
-		'addDca'  => 'dcaTemplate,dcaName,parentDcaName,parentDcaForeignKey,childDcaName,type,dataContainer,enableVersioning,addOnLoadCallbacks,addOnSubmitCallbacks,sortingMode,addSortingFields,addHeaderFields,addGlobalOperations,addOperations,addPublish',
+		'addDca'  => 'dcaTemplate,dcaName,parentDcaName,parentDcaForeignKey,childDcaName,dataContainer,enableVersioning,addOnLoadCallbacks,addOnSubmitCallbacks,sortingMode,addSortingFields,addHeaderFields,addGlobalOperations,addOperations,addPublish',
 		'addOnLoadCallbacks' => 'onLoadCallbacks',
 		'addOnSubmitCallbacks' => 'onSubmitCallbacks',
 		'addSortingFields' => 'sortingFields',
@@ -155,7 +155,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'default'   => array('css', 'img', 'js', 'htaccess'),
 			'options'   => array('css', 'img', 'js', 'htaccess'),
 			'reference' => &$GLOBALS['TL_LANG']['tl_entity_template']['addAssets'],
-			'eval'      => array('multiple' => true, 'tl_class' => 'w50'),
+			'eval'      => array('multiple' => true, 'tl_class' => 'w50 clr'),
 			'sql'       => "blob NULL"
 		),
 		'addConfig'    => array
@@ -296,16 +296,16 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'inputType' => 'multiColumnWizard',
 			'eval'      => array(
 				'mandatory' => true,
-				'tl_class'     => 'w50',
+				'tl_class'     => 'w50 clr',
 				'columnFields' => array(
 					'class'   => array(
-						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['class'],
+						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['onLoadCallbacks']['class'],
 						'exclude'   => true,
 						'inputType' => 'text',
 						'eval'      => array('style' => 'width: 180px')
 					),
 					'method' => array(
-						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['method'],
+						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['onLoadCallbacks']['method'],
 						'exclude'   => true,
 						'inputType' => 'text',
 						'eval'      => array('style' => 'width: 180px')
@@ -319,7 +319,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addOnSubmitCallbacks'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
 		'onSubmitCallbacks' => array
@@ -329,16 +329,16 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'inputType' => 'multiColumnWizard',
 			'eval'      => array(
 				'mandatory' => true,
-				'tl_class'     => 'w50',
+				'tl_class'     => 'w50 clr',
 				'columnFields' => array(
 					'class'   => array(
-						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['class'],
+						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['onSubmitCallbacks']['class'],
 						'exclude'   => true,
 						'inputType' => 'text',
 						'eval'      => array('style' => 'width: 180px')
 					),
 					'method' => array(
-						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['method'],
+						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['onSubmitCallbacks']['method'],
 						'exclude'   => true,
 						'inputType' => 'text',
 						'eval'      => array('style' => 'width: 180px')
@@ -354,7 +354,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'inputType'        => 'select',
 			'options'          => array(0, 1, 2, 3, 4, 5 ,6),
 			'reference'        => &$GLOBALS['TL_LANG']['tl_entity_template']['sortingMode']['options'],
-			'eval'             => array('mandatory' => true, 'tl_class' => 'w50'),
+			'eval'             => array('mandatory' => true, 'tl_class' => 'w50 clr'),
 			'sql'              => "varchar(255) NOT NULL default ''",
 		),
 		'addSortingFields'    => array
@@ -362,7 +362,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addSortingFields'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
 		'sortingFields'        => array
@@ -372,16 +372,16 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'inputType' => 'multiColumnWizard',
 			'eval'      => array(
 				'mandatory' => true,
-				'tl_class' => 'w50',
+				'tl_class' => 'w50 clr',
 				'columnFields' => array(
 					'field' => array(
-						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['field'],
+						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['sortingFields']['field'],
 						'exclude'   => true,
 						'inputType' => 'text',
 						'eval'      => array('style'=>'width: 180px')
 					),
 					'sorting' => array(
-						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['sorting'],
+						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['sortingFields']['sorting'],
 						'exclude'   => true,
 						'inputType' => 'select',
 						'options'   => array('ASC', 'DESC'),
@@ -396,7 +396,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addHeaderFields'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
 		'headerFields' => array
@@ -406,10 +406,10 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'inputType' => 'multiColumnWizard',
 			'eval'      => array(
 				'mandatory' => true,
-				'tl_class'     => 'w50',
+				'tl_class'     => 'w50 clr',
 				'columnFields' => array(
 					'field'   => array(
-						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['field'],
+						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['headerFields']['field'],
 						'exclude'   => true,
 						'inputType' => 'text',
 						'eval'      => array('style' => 'width: 180px')
@@ -423,7 +423,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addGlobalOperations'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
 		'globalOperations' => array
@@ -436,10 +436,10 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			),
 			'eval'      => array(
 				'mandatory' => true,
-				'tl_class'     => 'w50',
+				'tl_class'     => 'w50 clr',
 				'columnFields' => array(
-					'field'   => array(
-						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['field'],
+					'act'   => array(
+						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['globalOperations']['act'],
 						'exclude'   => true,
 						'inputType' => 'text',
 						'eval'      => array('style' => 'width: 180px')
@@ -453,7 +453,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addOperations'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
 		'operations' => array
@@ -461,17 +461,18 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['operations'],
 			'exclude'   => true,
 			'inputType' => 'multiColumnWizard',
-			'default' => array (
+			'default' => array(
 				array('act' => 'edit'),
 				array('act' => 'copy'),
 				array('act' => 'delete'),
+				array('act' => 'toggle'),
 				array('act' => 'show'),
 			),
 			'eval'      => array(
-				'tl_class'     => 'w50',
+				'tl_class'     => 'w50 clr',
 				'columnFields' => array(
-					'field'   => array(
-						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['field'],
+					'act'   => array(
+						'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['operations']['act'],
 						'exclude'   => true,
 						'inputType' => 'text',
 						'eval'      => array('style' => 'width: 180px')
@@ -485,7 +486,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addPublish'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
-			'eval'      => array('tl_class' => 'w50'),
+			'eval'      => array('tl_class' => 'w50 clr'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
 		'addLanguages'    => array
