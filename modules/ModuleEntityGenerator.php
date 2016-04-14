@@ -78,7 +78,11 @@ class ModuleEntityGenerator
 					{
 						if ($objDcaEntityTemplate->addModel)
 						{
-							$arrData[$objDcaEntityTemplate->dcaName] = $objDcaEntityTemplate->entityClassName;
+							$arrData[$objDcaEntityTemplate->dcaName] = array(
+								'entityClassName' => $objDcaEntityTemplate->entityClassName,
+								'addParentDca' => $objDcaEntityTemplate->addParentDca,
+								'parentDcaName' => EntityTemplateModel::findByPk($objDcaEntityTemplate->parentDca)->dcaName,
+							);
 						}
 
 						if ($objDcaEntityTemplate->addUserPermissions)
@@ -88,7 +92,7 @@ class ModuleEntityGenerator
 
 				$strTargetFile = $strTargetDir . '/config/config.php';
 				static::parseTemplate($objEntityTemplate->configTemplate, $objEntityTemplate, $strTargetFile, array(
-					'modelClasses' => $arrData,
+					'dcas' => $arrData,
 					'addUserPermissions' => $blnAddUserPermissions
 				));
 
@@ -157,7 +161,9 @@ class ModuleEntityGenerator
 					if ($objDcaEntityTemplate->addModel)
 					{
 						$strTargetFile = $strTargetDir . '/models/' . $objDcaEntityTemplate->entityClassName . 'Model.php';
-						static::parseTemplate($objDcaEntityTemplate->modelTemplate, $objDcaEntityTemplate, $strTargetFile);
+						static::parseTemplate($objDcaEntityTemplate->modelTemplate, $objDcaEntityTemplate, $strTargetFile, array(
+							'moduleNamespace' => $objEntityTemplate->moduleNamespace
+						));
 					}
 				}
 			}

@@ -3,10 +3,12 @@
 * Backend modules
 */
 <?php if ($this->moduleGroup == 'existing'): ?>
-$GLOBALS['BE_MOD']['<?= $this->existingModuleGroupName ?>']['<?= $this->dcaName ?>'] = array(
-	'tables' => array(<?php if ($this->addParentDca): ?>'tl_<?= $this->parentDcaName ?>', <?php endif; ?>'tl_<?= $this->dcaName ?>'),
-	'icon'   => 'system/modules/<?= $this->moduleName ?>/assets/img/icon_<?= $this->dcaName ?>.png'
+<?php foreach ($this->dcas as $strDcaName => $arrData): ?>
+$GLOBALS['BE_MOD']['<?= $this->existingModuleGroupName ?>']['<?= $strDcaName ?>'] = array(
+	'tables' => array(<?php if ($arrData['addParentDca']): ?>'tl_<?= $arrData['parentDcaName'] ?>', <?php endif; ?>'tl_<?= $strDcaName ?>'),
+	'icon'   => 'system/modules/<?= $this->moduleName ?>/assets/img/icon_<?= $strDcaName ?>.png'
 );
+<?php endforeach; ?>
 <?php else: ?>
 array_insert(
 	$GLOBALS['BE_MOD'],
