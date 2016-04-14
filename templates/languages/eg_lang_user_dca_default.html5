@@ -1,0 +1,13 @@
+$arrLang = &$GLOBALS['TL_LANG']['tl_user'];
+
+/**
+ * Fields
+ */
+$arrLang['<?= $this->moduleName ?>s'] = array('Erlaubte Archive', 'Hier können Sie den Zugriff auf eines oder mehrere Archive erlauben.');
+$arrLang['<?= $this->moduleName ?>p'] = array('Archivrechte', 'Hier können Sie die Archivrechte festlegen.');
+
+
+/**
+ * Legends
+ */
+$arrLang['<?= $this->moduleName ?>_legend'] = '<?= $this->localizedModuleName ?>-Archivrechte';

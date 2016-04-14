@@ -3,11 +3,9 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2015 Leo Feyer
+ * Copyright (c) 2005-2016 Leo Feyer
  *
- * @package Entity_generator
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @license LGPL-3.0+
  */
 
 
@@ -38,14 +36,15 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'eg_lang_modules_default'     => 'system/modules/entity_generator/templates/languages',
-	'eg_lang_dca_default'         => 'system/modules/entity_generator/templates/languages',
-	'eg_lang_dca_archive_default' => 'system/modules/entity_generator/templates/languages',
-	'eg_config_default'           => 'system/modules/entity_generator/templates/config',
-	'eg_model_default'            => 'system/modules/entity_generator/templates/models',
-	'eg_model_archive_default'    => 'system/modules/entity_generator/templates/models',
-	'eg_user_group_dca_default'   => 'system/modules/entity_generator/templates/dca',
-	'eg_user_dca_default'         => 'system/modules/entity_generator/templates/dca',
-	'eg_dca_archive_default'      => 'system/modules/entity_generator/templates/dca',
-	'eg_dca_default'              => 'system/modules/entity_generator/templates/dca',
+	'eg_lang_modules_default'        => 'system/modules/entity_generator/templates/languages',
+	'eg_lang_user_dca_default'       => 'system/modules/entity_generator/templates/languages',
+	'eg_lang_dca_default'            => 'system/modules/entity_generator/templates/languages',
+	'eg_lang_user_group_dca_default' => 'system/modules/entity_generator/templates/languages',
+	'eg_config_default'              => 'system/modules/entity_generator/templates/config',
+	'htaccess'                       => 'system/modules/entity_generator/templates/assets',
+	'eg_model_default'               => 'system/modules/entity_generator/templates/models',
+	'eg_user_group_dca_default'      => 'system/modules/entity_generator/templates/dca',
+	'eg_user_dca_default'            => 'system/modules/entity_generator/templates/dca',
+	'eg_dca_archive_default'         => 'system/modules/entity_generator/templates/dca',
+	'eg_dca_default'                 => 'system/modules/entity_generator/templates/dca',
 ));

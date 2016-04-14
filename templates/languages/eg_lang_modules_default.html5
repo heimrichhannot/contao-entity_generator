@@ -1,5 +1,9 @@
 /**
  * Backend modules
  */
+<?php if ($this->moduleGroup == 'new'): ?>
 $GLOBALS['TL_LANG']['MOD']['<?= $this->moduleName ?>'] = array('<?= $this->localizedModuleName ?>', '');
-$GLOBALS['TL_LANG']['MOD']['<?= $this->dcaName ?>'] = array('<?= $this->localizedEntityNamePlural ?>', '');
+<?php endif; ?>
+<?php foreach ($this->dcaLocalizations as $strDcaName => $strLocalizedEntityNamePlural): ?>
+$GLOBALS['TL_LANG']['MOD']['<?= $strDcaName ?>'] = array('<?= $strLocalizedEntityNamePlural ?>', '');
+<?php endforeach; ?>

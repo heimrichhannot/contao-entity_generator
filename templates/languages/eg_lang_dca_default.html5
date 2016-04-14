@@ -3,7 +3,9 @@ $arrLang = &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>'];
 /**
  * Fields
  */
-<?php if ($this->addPublish): ?>
+<?php if ($this->addTitle): ?>
+$arrLang['title'] = array('Titel', 'Geben Sie hier bitte den Titel ein.');
+<?php endif; if ($this->addPublish): ?>
 $arrLang['published'] = array('Veröffentlichen', 'Wählen Sie diese Option zum Veröffentlichen.');
 <?php endif; ?>
 
@@ -11,7 +13,9 @@ $arrLang['published'] = array('Veröffentlichen', 'Wählen Sie diese Option zum 
 /**
  * Legends
  */
-<?php if ($this->addPublish): ?>
+<?php if ($this->addTitle): ?>
+$arrLang['general_legend'] = 'Allgemeine Einstellungen';
+<?php endif; if ($this->addPublish): ?>
 $arrLang['publish_legend'] = 'Veröffentlichung';
 <?php endif; ?>
 

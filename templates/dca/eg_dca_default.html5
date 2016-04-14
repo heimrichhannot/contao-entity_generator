@@ -3,25 +3,36 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 	'config'   => array
 	(
 		'dataContainer'     => '<?= $this->dataContainer ?>',
-<?php if ($this->parentDcaName): ?>
+<?php if ($this->addParentDca): ?>
 		'ptable'            => 'tl_<?= $this->parentDcaName ?>',
 <?php endif; if ($this->childDcaName): ?>
 		'ctable'            => 'tl_<?= $this->childDcaName ?>',
 <?php endif; ?>
 		'enableVersioning'  => <?= $this->enableVersioning ? 'true' : 'false' ?>,
-<?php if ($this->addOnLoadCallbacks): ?>
+<?php if ($this->addParentDca || $this->addOnLoadCallbacks): ?>
 		'onload_callback' => array
 		(
-			<?php foreach ($this->onLoadCallbacks as $intId => $arrCallback): ?>array('<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>')<?php if ($intId != count($this->onLoadCallbacks) - 1): ?>, <?php endif; ?><?php endforeach; ?>
+<?php endif; ?>
+<?php if ($this->addParentDca): ?>
+			array('tl_<?= $this->dcaName ?>', 'checkPermission'),
+<?php endif; ?>
+<?php if ($this->addOnLoadCallbacks): ?>
+<?php foreach ($this->onLoadCallbacks as $intId => $arrCallback): ?>			array('<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>')<?php if ($intId != count($this->onLoadCallbacks) - 1): ?>,
+<?php endif; ?><?php endforeach; ?>
 
-		),
-<?php endif; if (!empty($this->addOnSubmitCallbacks)): ?>
-		'onsubmit_callback' => array
-		(
-			<?php foreach ($this->onSubmitCallbacks as $intId => $arrCallback): ?>array('<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>')<?php if ($intId != count($this->onSubmitCallbacks) - 1): ?>, <?php endif; ?><?php endforeach; ?>
-
+<?php endif; ?>
+<?php if ($this->addParentDca || $this->addOnLoadCallbacks): ?>
 		),
 <?php endif; ?>
+		'onsubmit_callback' => array
+		(
+			array('HeimrichHannot\Haste\Dca\General', 'setDateAdded'),
+<?php if ($this->addOnSubmitCallbacks): ?>
+<?php foreach ($this->onSubmitCallbacks as $intId => $arrCallback): ?>			array('<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>')<?php if ($intId != count($this->onSubmitCallbacks) - 1): ?>,
+<?php endif; ?><?php endforeach; ?>
+
+<?php endif; ?>
+		),
 		'sql' => array
 		(
 			'keys' => array
@@ -32,20 +43,22 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 	),
 	'list'     => array
 	(
-		'label' => array(
-			'fields' => array('id')
+		'label' => array
+		(
+			'fields' => array('id'),
+			'format' => '%s'
 		),
 		'sorting'           => array
 		(
 			'mode'                  => <?= $this->sortingMode ?>,
 <?php if ($this->addSortingFields): ?>
-			'fields'                => array(<?php foreach ($this->sortingFields as $intId => $arrField): ?>'<?= $arrField['field'] ?> <?= $arrField['sorting'] ?>'<?php if ($intId != count($this->sortingFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>),
+			'fields'                => array(<?php foreach ($this->sortingFields as $intId => $arrField): ?>'<?= $arrField['field'] ?><?= $arrField['sorting'] == 'ASC' ? ' ' . $arrField['sorting'] == 'ASC' : '' ?>'<?php if ($intId != count($this->sortingFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>),
 <?php endif; ?>
 <?php if ($this->addHeaderFields): ?>
 			'headerFields'          => array(<?php foreach ($this->headerFields as $intId => $strField): ?>'<?= $strField ?>'<?php if ($intId != count($this->headerFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>),
 <?php endif; ?>
-			'panelLayout'           => 'filter;search,limit'<?php if ($this->parentDcaName): ?>,
-			'child_record_callback' => array('tl_<?= $this->parentDcaName ?>', 'listChildren')
+			'panelLayout'           => 'filter;search,limit'<?php if ($this->addParentDca): ?>,
+			<?php if ($this->sortingMode): ?>'child_record_callback' => array('tl_<?= $this->dcaName ?>', 'listChildren')<?php endif; ?>
 <?php endif; ?>
 
 		),
@@ -71,7 +84,7 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 <?php endif ?>
 <?php endforeach ?>
 		),
-		'operations'        => array
+		'operations' => array
 		(
 <?php if ($this->addOperations) foreach ($this->operations as $strAct): ?>
 <?php if ($strAct == 'delete'): ?>
@@ -102,7 +115,7 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 		)
 	),
 	'palettes' => array(
-		'default' => '<?php if ($this->addPublish): ?>published;<?php endif; ?>'
+		'default' => '<?php if ($this->addTitle): ?>{general_legend},title;<?php endif; ?><?php if ($this->addPublish): ?>{publish_legend},published;<?php endif; ?>'
 	),
 	'fields'   => array
 	(
@@ -110,7 +123,7 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL auto_increment"
 		),
-<?php if ($this->parentDcaName): ?>
+<?php if ($this->addParentDca): ?>
 		'pid' => array
 		(
 			'foreignKey'              => 'tl_<?= $this->parentDcaName ?>.<?= $this->parentDcaForeignKey ?>',
@@ -130,6 +143,19 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 			'eval'                    => array('rgxp'=>'datim', 'doNotCopy' => true),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
+<?php if ($this->addTitle): ?>
+		'title' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['title'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('mandatory' => true, 'tl_class'=>'w50'),
+			'sql'                     => "varchar(255) NOT NULL default ''"
+		),
+<?php endif; ?>
 <?php if ($this->addPublish): ?>
 		'published' => array
 		(
@@ -147,16 +173,123 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 
 class tl_<?= $this->dcaName ?> extends \Backend
 {
+<?php if ($this->addParentDca): ?>
 
-<?php if ($this->parentDcaName): ?>
 	public function listChildren($arrRow)
 	{
-		return '<div class="tl_content_left">' . $arrRow['id'] . ' <span style="color:#b3b3b3; padding-left:3px">[' .
+		return '<div class="tl_content_left">' . ($arrRow['title'] ?: $arrRow['id']) . ' <span style="color:#b3b3b3; padding-left:3px">[' .
 				\Date::parse(Config::get('datimFormat'), trim($arrRow['dateAdded'])) . ']</span></div>';
 	}
 
-<?php endif; ?>
-<?php if ($this->addPublish): ?>
+	public function checkPermission()
+	{
+		$objUser = \BackendUser::getInstance();
+		$objSession = \Session::getInstance();
+		$objDatabase = \Database::getInstance();
+
+		if ($objUser->isAdmin)
+		{
+			return;
+		}
+
+		// Set the root IDs
+		if (!is_array($objUser-><?= $this->moduleName; ?>s) || empty($objUser-><?= $this->moduleName; ?>s))
+		{
+			$root = array(0);
+		}
+		else
+		{
+			$root = $objUser-><?= $this->moduleName; ?>s;
+		}
+
+		$id = strlen(Input::get('id')) ? Input::get('id') : CURRENT_ID;
+
+		// Check current action
+		switch (Input::get('act'))
+		{
+			case 'paste':
+				// Allow
+				break;
+
+			case 'create':
+				if (!strlen(Input::get('pid')) || !in_array(Input::get('pid'), $root))
+				{
+					\Controller::log('Not enough permissions to create <?= $this->dcaName ?> items in <?= $this->dcaName ?> archive ID "'.Input::get('pid').'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
+					\Controller::redirect('contao/main.php?act=error');
+				}
+				break;
+
+			case 'cut':
+			case 'copy':
+				if (!in_array(Input::get('pid'), $root))
+				{
+					\Controller::log('Not enough permissions to '.Input::get('act').' <?= $this->dcaName ?> item ID "'.$id.'" to <?= $this->dcaName ?> archive ID "'.Input::get('pid').'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
+					\Controller::redirect('contao/main.php?act=error');
+				}
+				// NO BREAK STATEMENT HERE
+
+			case 'edit':
+			case 'show':
+			case 'delete':
+			case 'toggle':
+			case 'feature':
+				$objArchive = $objDatabase->prepare("SELECT pid FROM tl_<?= $this->dcaName ?> WHERE id=?")
+					->limit(1)->execute($id);
+
+				if ($objArchive->numRows < 1)
+				{
+					\Controller::log('Invalid <?= $this->dcaName ?> item ID "'.$id.'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
+					\Controller::redirect('contao/main.php?act=error');
+				}
+
+				if (!in_array($objArchive->pid, $root))
+				{
+					\Controller::log('Not enough permissions to '.Input::get('act').' <?= $this->dcaName ?> item ID "'.$id.'" of <?= $this->dcaName ?> archive ID "'.$objArchive->pid.'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
+					\Controller::redirect('contao/main.php?act=error');
+				}
+			break;
+
+			case 'select':
+			case 'editAll':
+			case 'deleteAll':
+			case 'overrideAll':
+			case 'cutAll':
+			case 'copyAll':
+				if (!in_array($id, $root))
+				{
+					\Controller::log('Not enough permissions to access <?= $this->dcaName ?> archive ID "'.$id.'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
+					\Controller::redirect('contao/main.php?act=error');
+				}
+
+				$objArchive = $objDatabase->prepare("SELECT id FROM tl_<?= $this->dcaName ?> WHERE pid=?")->execute($id);
+
+				if ($objArchive->numRows < 1)
+				{
+					\Controller::log('Invalid <?= $this->dcaName ?> archive ID "'.$id.'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
+					\Controller::redirect('contao/main.php?act=error');
+				}
+
+				$session = $objSession->getData();
+				$session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $objArchive->fetchEach('id'));
+				$objSession->setData($session);
+				break;
+
+			default:
+				if (strlen(Input::get('act')))
+				{
+					\Controller::log('Invalid command "'.Input::get('act').'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
+					\Controller::redirect('contao/main.php?act=error');
+				}
+				elseif (!in_array($id, $root))
+				{
+					\Controller::log('Not enough permissions to access <?= $this->dcaName ?> archive ID ' . $id, 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
+					\Controller::redirect('contao/main.php?act=error');
+				}
+				break;
+		}
+	}
+<?php endif; if ($this->addPublish): ?>
+
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
 	{
 		$objUser = \BackendUser::getInstance();

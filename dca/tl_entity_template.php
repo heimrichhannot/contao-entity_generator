@@ -73,9 +73,10 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			),
 			'generate' => array
 			(
-				'label' => &$GLOBALS['TL_LANG']['tl_entity_template']['generate'],
-				'href'  => 'key=generate',
-				'icon'  => 'system/modules/entity_generator/assets/img/icon.png',
+				'label'           => &$GLOBALS['TL_LANG']['tl_entity_template']['generate'],
+				'href'            => 'key=generate',
+				'icon'            => 'system/modules/entity_generator/assets/img/icon.png',
+				'button_callback' => array('tl_entity_template', 'generate')
 			)
 		)
 	),
@@ -83,25 +84,33 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 	// Palettes
 	'palettes'    => array
 	(
-		'__selector__' => array('addConfig', 'addBackendModule', 'insertInExistingModuleGroup', 'addDca', 'addOnLoadCallbacks', 'addOnSubmitCallbacks', 'addSortingFields', 'addHeaderFields', 'addGlobalOperations', 'addOperations', 'addLanguages', 'addModels'),
-		'default'      => '{general_legend},title,outputDir;{module_legend},moduleName,moduleNamespace,addAssets,addConfig;{entity_legend},addDca;{language_legend},addLanguages;{model_legend},addModels;'
+		'__selector__' => array('type', 'addDcas', 'addUserPermissions', 'addParentDca', 'addLanguages', 'addModel',
+				'addConfig', 'addBackendModule', 'moduleGroup', 'addOnLoadCallbacks', 'addOnSubmitCallbacks',
+				'addSortingFields', 'addHeaderFields', 'addGlobalOperations', 'addOperations'
+		),
+		'default'      => '{general_legend},title,type;',
+		'module'       => '{general_legend},title,type;{module_legend},outputDir,moduleName,moduleNamespace,addAssets,addConfig,addDcas;',
+		'dca'          => '{general_legend},title,type;{entity_legend},dcaTemplate,dcaName,childDcaName,addUserPermissions,dataContainer,enableVersioning,addOnLoadCallbacks,addOnSubmitCallbacks,sortingMode,addSortingFields,addHeaderFields,addGlobalOperations,addOperations,addPublish,addTitle,addParentDca;{language_legend},addLanguages;{model_legend},addModel;'
 	),
 
 	// Subpalettes
 	'subpalettes' => array
 	(
 		'addConfig' => 'configTemplate,addBackendModule',
-		'addBackendModule' => 'insertInExistingModuleGroup',
-		'insertInExistingModuleGroup' => 'existingModuleGroupName',
-		'addDca'  => 'dcaTemplate,dcaName,parentDcaName,parentDcaForeignKey,childDcaName,dataContainer,enableVersioning,addOnLoadCallbacks,addOnSubmitCallbacks,sortingMode,addSortingFields,addHeaderFields,addGlobalOperations,addOperations,addPublish',
+		'addDcas' => 'dcas',
+		'addUserPermissions' => 'userTemplate,userGroupTemplate,userLanguageTemplate,userGroupLanguageTemplate',
+		'addParentDca' => 'parentDca,parentDcaForeignKey',
+		'addLanguages' => 'dcaLangTemplate,localizedEntityName,localizedEntityNamePlural',
+		'addModel' => 'modelTemplate,entityClassName',
+		'addBackendModule' => 'modulesLangTemplate,moduleGroup',
+		'moduleGroup_new' => 'localizedModuleName',
+		'moduleGroup_existing' => 'existingModuleGroupName',
 		'addOnLoadCallbacks' => 'onLoadCallbacks',
 		'addOnSubmitCallbacks' => 'onSubmitCallbacks',
 		'addSortingFields' => 'sortingFields',
 		'addHeaderFields' => 'headerFields',
 		'addGlobalOperations' => 'globalOperations',
-		'addOperations' => 'operations',
-		'addLanguages' => 'dcaLangTemplate,modulesLangTemplate,localizedEntityName,localizedEntityNamePlural,localizedModuleName',
-		'addModels' => 'modelTemplate'
+		'addOperations' => 'operations'
 	),
 
 	// Fields
@@ -114,6 +123,16 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 		'tstamp'       => array
 		(
 			'sql' => "int(10) unsigned NOT NULL default '0'"
+		),
+		'type'        => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['type'],
+			'exclude'   => true,
+			'inputType' => 'select',
+			'options'   => array('module', 'dca'),
+			'reference' => &$GLOBALS['TL_LANG']['tl_entity_template']['type'],
+			'eval'      => array('mandatory' => true, 'submitOnChange' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+			'sql'       => "varchar(255) NOT NULL default ''"
 		),
 		'title'        => array
 		(
@@ -133,19 +152,19 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 		),
 		'moduleName'        => array
 		(
-				'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['moduleName'],
-				'exclude'   => true,
-				'inputType' => 'text',
-				'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
-				'sql'       => "varchar(255) NOT NULL default ''"
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['moduleName'],
+			'exclude'   => true,
+			'inputType' => 'text',
+			'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+			'sql'       => "varchar(255) NOT NULL default ''"
 		),
 		'moduleNamespace'        => array
 		(
-				'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['moduleNamespace'],
-				'exclude'   => true,
-				'inputType' => 'text',
-				'eval'      => array('decodeEntities' => true, 'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
-				'sql'       => "varchar(255) NOT NULL default ''"
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['moduleNamespace'],
+			'exclude'   => true,
+			'inputType' => 'text',
+			'eval'      => array('decodeEntities' => true, 'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+			'sql'       => "varchar(255) NOT NULL default ''"
 		),
 		'addAssets'    => array
 		(
@@ -184,13 +203,16 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
-		'insertInExistingModuleGroup' => array
+		'moduleGroup' => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['insertInExistingModuleGroup'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['moduleGroup'],
 			'exclude'   => true,
-			'inputType' => 'checkbox',
+			'default'   => 'new',
+			'inputType' => 'select',
+			'options'   => array('new', 'existing'),
+			'reference' => &$GLOBALS['TL_LANG']['tl_entity_template']['moduleGroup'],
 			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
-			'sql'       => "char(1) NOT NULL default ''"
+			'sql'       => "varchar(255) NOT NULL default ''"
 		),
 		'existingModuleGroupName'        => array
 		(
@@ -200,14 +222,53 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
 			'sql'       => "varchar(255) NOT NULL default ''"
 		),
-		'addDca'    => array
+		'addDcas'    => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addDca'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addDcas'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
+		'dcas'        => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['dcas'],
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options_callback' => array('tl_entity_template', 'getDcaEntityTemplatesAsOptions'),
+			'eval'             => array('mandatory' => true, 'multiple' => true, 'chosen' => true,
+										'tl_class'  => 'long clr',
+										'style'     => 'width: 97%'
+			),
+			'sql'              => "blob NULL"
+		),
+		'parentDca'        => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['parentDca'],
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options_callback' => array('tl_entity_template', 'getDcaEntityTemplatesAsOptions'),
+			'eval'             => array('mandatory' => true, 'chosen' => true, 'includeBlankOption' => true,
+										'tl_class'  => 'w50 clr'),
+			'sql'              => "int(10) unsigned NOT NULL default '0'"
+		),
+		'addLanguages'    => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addLanguages'],
+			'exclude'   => true,
+			'inputType' => 'checkbox',
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
+			'sql'       => "char(1) NOT NULL default ''"
+		),
+		'addModel'    => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addModel'],
+			'exclude'   => true,
+			'inputType' => 'checkbox',
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
+			'sql'       => "char(1) NOT NULL default ''"
+		),
+		// dca
 		'dcaTemplate' => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['dcaTemplate'],
@@ -226,12 +287,20 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
 			'sql'       => "varchar(255) NOT NULL default ''"
 		),
+		'addParentDca'    => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addParentDca'],
+			'exclude'   => true,
+			'inputType' => 'checkbox',
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
+			'sql'       => "char(1) NOT NULL default ''"
+		),
 		'parentDcaName'  => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['parentDcaName'],
 			'exclude'   => true,
 			'inputType' => 'text',
-			'eval'      => array('maxlength' => 255, 'tl_class' => 'w50'),
+			'eval'      => array('maxlength' => 255, 'mandatory' => true, 'tl_class' => 'w50'),
 			'sql'       => "varchar(255) NOT NULL default ''"
 		),
 		'parentDcaForeignKey'  => array
@@ -239,7 +308,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['parentDcaForeignKey'],
 			'exclude'   => true,
 			'inputType' => 'text',
-			'eval'      => array('maxlength' => 255, 'tl_class' => 'w50'),
+			'eval'      => array('maxlength' => 255, 'mandatory' => true, 'tl_class' => 'w50'),
 			'sql'       => "varchar(255) NOT NULL default ''"
 		),
 		'childDcaName'  => array
@@ -247,39 +316,76 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['childDcaName'],
 			'exclude'   => true,
 			'inputType' => 'text',
-			'eval'      => array('maxlength' => 255, 'tl_class' => 'w50'),
+			'eval'      => array('maxlength' => 255, 'tl_class' => 'w50 clr'),
 			'sql'       => "varchar(255) NOT NULL default ''"
 		),
-		'type'        => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['type'],
+		'addUserPermissions' => array(
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addUserPermissions'],
 			'exclude'   => true,
-			'inputType' => 'select',
-			'options'   => array('normal', 'archive', 'child'),
-			'reference' => &$GLOBALS['TL_LANG']['tl_entity_template']['type'],
-			'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
-			'sql'       => "varchar(255) NOT NULL default ''"
+			'inputType' => 'checkbox',
+			'eval'      => array('tl_class' => 'w50', 'submitOnChange' => true),
+			'sql'       => "char(1) NOT NULL default ''"
+		),
+		'userTemplate' => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['userTemplate'],
+			'default'          => 'eg_user_dca_default',
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options'          => \Controller::getTemplateGroup('eg_user_dca_'),
+			'eval'             => array('mandatory' => true, 'tl_class' => 'w50 clr'),
+			'sql'              => "varchar(255) NOT NULL default ''",
+		),
+		'userGroupTemplate' => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['userGroupTemplate'],
+			'default'          => 'eg_user_group_dca_default',
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options'          => \Controller::getTemplateGroup('eg_user_group_dca_'),
+			'eval'             => array('mandatory' => true, 'tl_class' => 'w50'),
+			'sql'              => "varchar(255) NOT NULL default ''",
+		),
+		'userLanguageTemplate' => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['userLanguageTemplate'],
+			'default'          => 'eg_lang_user_dca_default',
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options'          => \Controller::getTemplateGroup('eg_lang_user_dca_'),
+			'eval'             => array('mandatory' => true, 'tl_class' => 'w50 clr'),
+			'sql'              => "varchar(255) NOT NULL default ''",
+		),
+		'userGroupLanguageTemplate' => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['userGroupLanguageTemplate'],
+			'default'          => 'eg_lang_user_group_dca_default',
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options'          => \Controller::getTemplateGroup('eg_lang_user_group_dca_'),
+			'eval'             => array('mandatory' => true, 'tl_class' => 'w50'),
+			'sql'              => "varchar(255) NOT NULL default ''",
 		),
 		'dataContainer' => array
 		(
-				'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['dataContainer'],
-				'exclude'          => true,
-				'inputType'        => 'select',
-				'options'          => array(
-					'Table' => 'DC_Table',
-					'File' => 'DC_File',
-					'Folder' => 'DC_Folder',
-				),
-				'eval'             => array('mandatory' => true, 'tl_class' => 'w50 clr'),
-				'sql'              => "varchar(255) NOT NULL default ''",
+			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['dataContainer'],
+			'exclude'          => true,
+			'inputType'        => 'select',
+			'options'          => array(
+				'Table' => 'DC_Table',
+				'File' => 'DC_File',
+				'Folder' => 'DC_Folder',
+			),
+			'eval'             => array('mandatory' => true, 'tl_class' => 'w50 clr'),
+			'sql'              => "varchar(255) NOT NULL default ''",
 		),
 		'enableVersioning'    => array
 		(
-				'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['enableVersioning'],
-				'exclude'   => true,
-				'inputType' => 'checkbox',
-				'eval'      => array('tl_class' => 'w50'),
-				'sql'       => "char(1) NOT NULL default ''"
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['enableVersioning'],
+			'exclude'   => true,
+			'inputType' => 'checkbox',
+			'eval'      => array('tl_class' => 'w50'),
+			'sql'       => "char(1) NOT NULL default ''"
 		),
 		'addOnLoadCallbacks'    => array
 		(
@@ -489,14 +595,15 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'eval'      => array('tl_class' => 'w50 clr'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
-		'addLanguages'    => array
+		'addTitle'    => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addLanguages'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addTitle'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
+			'eval'      => array('tl_class' => 'w50'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
+		// languages
 		'dcaLangTemplate' => array
 		(
 			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['dcaLangTemplate'],
@@ -541,14 +648,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'eval'             => array('mandatory' => true, 'tl_class' => 'w50'),
 			'sql'              => "varchar(255) NOT NULL default ''",
 		),
-		'addModels'    => array
-		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addModels'],
-			'exclude'   => true,
-			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
-			'sql'       => "char(1) NOT NULL default ''"
-		),
+		// model
 		'modelTemplate' => array
 		(
 				'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['modelTemplate'],
@@ -559,11 +659,43 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 				'eval'             => array('mandatory' => true, 'tl_class' => 'w50 clr'),
 				'sql'              => "varchar(255) NOT NULL default ''",
 		),
+		'entityClassName' => array
+		(
+			'label'            => &$GLOBALS['TL_LANG']['tl_entity_template']['entityClassName'],
+			'exclude'          => true,
+			'inputType'        => 'text',
+			'eval'             => array('mandatory' => true, 'tl_class' => 'w50'),
+			'sql'              => "varchar(255) NOT NULL default ''",
+		)
 	)
 );
 
 
 class tl_entity_template extends \Backend
 {
+	public function generate($row, $href, $label, $title, $icon, $attributes)
+	{
+		$href .= '&id=' . $row['id'];
 
+		if ($row['type'] == 'module')
+			return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
+	}
+
+	public static function getDcaEntityTemplatesAsOptions()
+	{
+		return static::getEntityTemplatesAsOptions('dca');
+	}
+
+	public static function getEntityTemplatesAsOptions($strType)
+	{
+		$arrOptions = array();
+
+		if (($objEntityTemplates = \HeimrichHannot\EntityGenerator\EntityTemplateModel::findBy('type', $strType)) !== null)
+		{
+			$arrOptions = array_combine($objEntityTemplates->fetchEach('id'), $objEntityTemplates->fetchEach('title'));
+			asort($arrOptions);
+		}
+
+		return $arrOptions;
+	}
 }

@@ -2,9 +2,9 @@
 /**
 * Backend modules
 */
-<?php if ($this->insertInExistingModuleGroup): ?>
+<?php if ($this->moduleGroup == 'existing'): ?>
 $GLOBALS['BE_MOD']['<?= $this->existingModuleGroupName ?>']['<?= $this->dcaName ?>'] = array(
-	'tables' => array('tl_<?= $this->dcaName ?>'),
+	'tables' => array(<?php if ($this->addParentDca): ?>'tl_<?= $this->parentDcaName ?>', <?php endif; ?>'tl_<?= $this->dcaName ?>'),
 	'icon'   => 'system/modules/<?= $this->moduleName ?>/assets/img/icon_<?= $this->dcaName ?>.png'
 );
 <?php else: ?>
@@ -21,11 +21,19 @@ array_insert(
 	)
 );
 <?php endif; ?>
-<?php endif; ?>
+<?php endif; if (!empty($this->modelClasses)): ?>
 
-<?php if ($this->addModels): ?>
 /**
  * Models
  */
-$GLOBALS['TL_MODELS']['tl_<?= $this->dcaName ?>'] = '\<?= $this->moduleNamespace ?>\<?= $this->entityClassName ?>Model';
+<?php foreach ($this->modelClasses as $strDcaName => $strEntityClassName): ?>
+$GLOBALS['TL_MODELS']['tl_<?= $strDcaName ?>'] = '\<?= $this->moduleNamespace ?>\<?= $strEntityClassName ?>Model';
+<?php endforeach; ?>
+<?php endif; if ($this->addUserPermissions): ?>
+
+/**
+* Add permissions
+*/
+$GLOBALS['TL_PERMISSIONS'][] = '<?= $this->moduleName; ?>s';
+$GLOBALS['TL_PERMISSIONS'][] = '<?= $this->moduleName; ?>p';
 <?php endif; ?>

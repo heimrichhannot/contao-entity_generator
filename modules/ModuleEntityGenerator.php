@@ -64,48 +64,142 @@ class ModuleEntityGenerator
 			}
 
 			// config
+			$objDcaEntityTemplates = static::getLinkedDcas($objEntityTemplate->id);
+
 			if ($objEntityTemplate->addConfig)
 			{
+				$arrData = array();
+				$blnAddUserPermissions = false;
+
+				if ($objEntityTemplate->addDcas)
+				{
+
+					foreach ($objDcaEntityTemplates as $objDcaEntityTemplate)
+					{
+						if ($objDcaEntityTemplate->addModel)
+						{
+							$arrData[$objDcaEntityTemplate->dcaName] = $objDcaEntityTemplate->entityClassName;
+						}
+
+						if ($objDcaEntityTemplate->addUserPermissions)
+							$blnAddUserPermissions = true;
+					}
+				}
+
 				$strTargetFile = $strTargetDir . '/config/config.php';
-				static::parseTemplate($objEntityTemplate->configTemplate, $objEntityTemplate, $strTargetFile);
+				static::parseTemplate($objEntityTemplate->configTemplate, $objEntityTemplate, $strTargetFile, array(
+					'modelClasses' => $arrData,
+					'addUserPermissions' => $blnAddUserPermissions
+				));
+
+				// modules lang
+				if ($objEntityTemplate->addBackendModule)
+				{
+					$strTargetFile = $strTargetDir . '/languages/de/modules.php';
+					$arrData = array();
+
+					if ($objEntityTemplate->addDcas)
+					{
+						foreach (deserialize($objEntityTemplate->dcas) as $intId)
+						{
+							if (($objDcaEntityTemplate = EntityTemplateModel::findByPk($intId)) !== null)
+							{
+								$arrData[$objDcaEntityTemplate->dcaName] = $objDcaEntityTemplate->localizedEntityNamePlural;
+							}
+						}
+					}
+
+					static::parseTemplate($objEntityTemplate->modulesLangTemplate, $objEntityTemplate, $strTargetFile, array(
+						'dcaLocalizations' => $arrData
+					));
+				}
 			}
 
 			// dca
-			if ($objEntityTemplate->addDca)
+			if ($objEntityTemplate->addDcas)
 			{
-				$strTargetFile = $strTargetDir . '/dca/tl_' . $objEntityTemplate->dcaName . '.php';
-				static::parseTemplate($objEntityTemplate->dcaTemplate, $objEntityTemplate, $strTargetFile);
-			}
-
-			// languages
-			if ($objEntityTemplate->addLanguages)
-			{
-				// modules
-				if ($objEntityTemplate->addConfig && $objEntityTemplate->addBackendModule)
+				foreach ($objDcaEntityTemplates as $objDcaEntityTemplate)
 				{
-					$strTargetFile = $strTargetDir . '/languages/de/modules.php';
-					static::parseTemplate($objEntityTemplate->modulesLangTemplate, $objEntityTemplate, $strTargetFile);
+					static::prepareData($objDcaEntityTemplate);
+
+					// dca
+					$strTargetFile = $strTargetDir . '/dca/tl_' . $objDcaEntityTemplate->dcaName . '.php';
+					static::parseTemplate($objDcaEntityTemplate->dcaTemplate, $objDcaEntityTemplate, $strTargetFile);
+
+					// user permissions
+					if ($objDcaEntityTemplate->addUserPermissions)
+					{
+						// tl_user - dca
+						$strTargetFile = $strTargetDir . '/dca/tl_user.php';
+						static::parseTemplate($objDcaEntityTemplate->userTemplate, $objDcaEntityTemplate, $strTargetFile);
+
+						// tl_user_group - dca
+						$strTargetFile = $strTargetDir . '/dca/tl_user_group.php';
+						static::parseTemplate($objDcaEntityTemplate->userGroupTemplate, $objDcaEntityTemplate, $strTargetFile);
+
+						// tl_user - language
+						$strTargetFile = $strTargetDir . '/languages/de/tl_user.php';
+						static::parseTemplate($objDcaEntityTemplate->userLanguageTemplate, $objDcaEntityTemplate, $strTargetFile);
+
+						// tl_user_group - language
+						$strTargetFile = $strTargetDir . '/languages/de/tl_user_group.php';
+						static::parseTemplate($objDcaEntityTemplate->userGroupLanguageTemplate, $objDcaEntityTemplate, $strTargetFile);
+					}
+
+					// languages
+					if ($objDcaEntityTemplate->addLanguages)
+					{
+						$strTargetFile = $strTargetDir . '/languages/de/tl_' . $objDcaEntityTemplate->dcaName . '.php';
+						static::parseTemplate($objDcaEntityTemplate->dcaLangTemplate, $objDcaEntityTemplate, $strTargetFile);
+					}
+
+					// models
+					if ($objDcaEntityTemplate->addModel)
+					{
+						$strTargetFile = $strTargetDir . '/models/' . $objDcaEntityTemplate->entityClassName . 'Model.php';
+						static::parseTemplate($objDcaEntityTemplate->modelTemplate, $objDcaEntityTemplate, $strTargetFile);
+					}
 				}
-
-				// dca
-				$strTargetFile = $strTargetDir . '/languages/de/tl_' . $objEntityTemplate->dcaName . '.php';
-				static::parseTemplate($objEntityTemplate->dcaLangTemplate, $objEntityTemplate, $strTargetFile);
-			}
-
-			// models
-			if ($objEntityTemplate->addDca)
-			{
-				$strTargetFile = $strTargetDir . '/models/' . $objEntityTemplate->entityClassName . 'Model.php';
-				static::parseTemplate($objEntityTemplate->modelTemplate, $objEntityTemplate, $strTargetFile);
 			}
 		}
 
 		static::redirectToList();
 	}
 
+	public static function getLinkedDcas($intTemplate, array $arrDcas = array())
+	{
+		if (($objEntityTemplate = EntityTemplateModel::findByPk($intTemplate)) !== null)
+		{
+			if ($objEntityTemplate->type == 'module' && $objEntityTemplate->addDcas)
+			{
+				foreach (deserialize($objEntityTemplate->dcas, true) as $intId)
+				{
+					$arrDcas += static::getLinkedDcas($intId, $arrDcas);
+				}
+			}
+
+			if ($objEntityTemplate->type == 'dca')
+			{
+				if (!in_array($objEntityTemplate, $arrDcas))
+					$arrDcas[] = $objEntityTemplate;
+
+				if ($objEntityTemplate->addParentDca)
+					$arrDcas += static::getLinkedDcas($objEntityTemplate->parentDca, $arrDcas);
+			}
+		}
+
+		return $arrDcas;
+	}
+
 	protected static function prepareData($objEntityTemplate)
 	{
-		$objEntityTemplate->entityClassName = ucfirst(Strings::underscoreToCamelCase($objEntityTemplate->dcaName));
+		if ($objEntityTemplate->addParentDca)
+		{
+			if (($objParent = EntityTemplateModel::findByPk($objEntityTemplate->parentDca)) !== null)
+			{
+				$objEntityTemplate->parentDcaName = $objParent->dcaName;
+			}
+		}
 
 		// multicolumnwizard fields
 		foreach (static::$arrMultiColumnWizardFields as $strField)
@@ -140,14 +234,14 @@ class ModuleEntityGenerator
 		\Controller::redirect('contao/main.php?do=entity_generator');
 	}
 
-	protected static function parseTemplate($strTemplate, $objEntityTemplate, $strTargetFile)
+	protected static function parseTemplate($strTemplate, $objEntityTemplate, $strTargetFile, array $arrData = array())
 	{
 		if (!$strTemplate)
 			return;
 
 		$objTemplate = new \BackendTemplate($strTemplate);
 
-		$objTemplate->setData($objEntityTemplate->row());
+		$objTemplate->setData($arrData + $objEntityTemplate->row());
 
 		$strResult = $objTemplate->parse();
 
