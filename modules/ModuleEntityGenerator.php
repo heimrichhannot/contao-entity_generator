@@ -3,8 +3,7 @@
 namespace HeimrichHannot\EntityGenerator;
 
 
-use HeimrichHannot\HastePlus\Files;
-use HeimrichHannot\HastePlus\Strings;
+use HeimrichHannot\Haste\Util\Files;
 
 class ModuleEntityGenerator
 {
