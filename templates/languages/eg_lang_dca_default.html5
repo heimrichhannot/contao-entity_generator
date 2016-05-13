@@ -7,7 +7,10 @@ $arrLang = &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>'];
 $arrLang['title'] = array('Titel', 'Geben Sie hier bitte den Titel ein.');
 <?php endif; if ($this->addPublish): ?>
 $arrLang['published'] = array('Veröffentlichen', 'Wählen Sie diese Option zum Veröffentlichen.');
+$arrLang['start'] = array('Anzeigen ab', '<?= $this->localizedEntityName; ?> erst ab diesem Tag auf der Webseite anzeigen.');
+$arrLang['stop'] = array('Anzeigen bis', '<?= $this->localizedEntityName; ?> nur bis zu diesem Tag auf der Webseite anzeigen.');
 <?php endif; ?>
+$arrLang['tstamp'] = array('Änderungsdatum', '');
 
 
 /**

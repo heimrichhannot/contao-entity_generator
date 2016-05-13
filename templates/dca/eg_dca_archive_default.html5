@@ -121,7 +121,11 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName; ?>'] = array
 	),
 	'palettes' => array
 	(
+		'__selector__' => array(<?php if ($this->addPublish): ?>'published'<?php endif; ?>),
 		'default' => '<?php if ($this->addTitle): ?>{general_legend},title;<?php endif; ?><?php if ($this->addPublish): ?>{publish_legend},published;<?php endif; ?>'
+	),
+	'subpalettes' => array(
+		'published'	=> 'start,stop'
 	),
 	'fields'   => array
 	(
@@ -139,6 +143,7 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName; ?>'] = array
 <?php endif; ?>
 		'tstamp' => array
 		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['tstamp'],
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		'dateAdded' => array
@@ -169,9 +174,25 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName; ?>'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50', 'doNotCopy'=>true),
+			'eval'                    => array('doNotCopy'=>true, 'submitOnChange' => true),
 			'sql'                     => "char(1) NOT NULL default '0'"
 		),
+		'start' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['start'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+			'sql'                     => "varchar(10) NOT NULL default ''"
+		),
+		'stop' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['stop'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+			'sql'                     => "varchar(10) NOT NULL default ''"
+		)
 <?php endif; ?>
 	)
 );

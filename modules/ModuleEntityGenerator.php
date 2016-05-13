@@ -134,19 +134,27 @@ class ModuleEntityGenerator
 					{
 						// tl_user - dca
 						$strTargetFile = $strTargetDir . '/dca/tl_user.php';
-						static::parseTemplate($objDcaEntityTemplate->userTemplate, $objDcaEntityTemplate, $strTargetFile);
+						static::parseTemplate($objDcaEntityTemplate->userTemplate, $objDcaEntityTemplate, $strTargetFile, array(
+							'moduleName' => $objEntityTemplate->moduleName
+						));
 
 						// tl_user_group - dca
 						$strTargetFile = $strTargetDir . '/dca/tl_user_group.php';
-						static::parseTemplate($objDcaEntityTemplate->userGroupTemplate, $objDcaEntityTemplate, $strTargetFile);
+						static::parseTemplate($objDcaEntityTemplate->userGroupTemplate, $objDcaEntityTemplate, $strTargetFile, array(
+							'moduleName' => $objEntityTemplate->moduleName
+						));
 
 						// tl_user - language
 						$strTargetFile = $strTargetDir . '/languages/de/tl_user.php';
-						static::parseTemplate($objDcaEntityTemplate->userLanguageTemplate, $objDcaEntityTemplate, $strTargetFile);
+						static::parseTemplate($objDcaEntityTemplate->userLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
+							'moduleName' => $objEntityTemplate->moduleName
+						));
 
 						// tl_user_group - language
 						$strTargetFile = $strTargetDir . '/languages/de/tl_user_group.php';
-						static::parseTemplate($objDcaEntityTemplate->userGroupLanguageTemplate, $objDcaEntityTemplate, $strTargetFile);
+						static::parseTemplate($objDcaEntityTemplate->userGroupLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
+							'moduleName' => $objEntityTemplate->moduleName
+						));
 					}
 
 					// languages
