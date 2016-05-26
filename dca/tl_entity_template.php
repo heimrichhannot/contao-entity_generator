@@ -84,18 +84,19 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 	// Palettes
 	'palettes'    => array
 	(
-		'__selector__' => array('type', 'addDcas', 'addUserPermissions', 'addParentDca', 'addLanguages', 'addModel',
+		'__selector__' => array('type', 'addOutputDir', 'addDcas', 'addUserPermissions', 'addParentDca', 'addLanguages', 'addModel',
 				'addConfig', 'addBackendModule', 'moduleGroup', 'addOnLoadCallbacks', 'addOnSubmitCallbacks',
 				'addSortingFields', 'addHeaderFields', 'addGlobalOperations', 'addOperations'
 		),
 		'default'      => '{general_legend},title,type;',
-		'module'       => '{general_legend},title,type;{module_legend},outputDir,moduleName,moduleNamespace,addAssets,addConfig,addDcas;',
+		'module'       => '{general_legend},title,type;{module_legend},addOutputDir,moduleName,moduleNamespace,addAssets,addConfig,addDcas;',
 		'dca'          => '{general_legend},title,type;{entity_legend},dcaTemplate,dcaName,childDcaName,addUserPermissions,dataContainer,enableVersioning,addOnLoadCallbacks,addOnSubmitCallbacks,sortingMode,addSortingFields,addHeaderFields,addGlobalOperations,addOperations,addPublish,addTitle,addParentDca;{language_legend},addLanguages;{model_legend},addModel;'
 	),
 
 	// Subpalettes
 	'subpalettes' => array
 	(
+		'addOutputDir' => 'outputDir',
 		'addConfig' => 'configTemplate,addBackendModule',
 		'addDcas' => 'dcas',
 		'addUserPermissions' => 'userTemplate,userGroupTemplate,userLanguageTemplate,userGroupLanguageTemplate',
@@ -130,9 +131,10 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'exclude'   => true,
 			'inputType' => 'select',
 			'options'   => array('module', 'dca'),
+			'default'   => 'module',
 			'reference' => &$GLOBALS['TL_LANG']['tl_entity_template']['type'],
 			'eval'      => array('mandatory' => true, 'submitOnChange' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
-			'sql'       => "varchar(255) NOT NULL default ''"
+			'sql'       => "varchar(255) NOT NULL default 'module'"
 		),
 		'title'        => array
 		(
@@ -142,12 +144,20 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
 			'sql'       => "varchar(255) NOT NULL default ''"
 		),
+		'addOutputDir' => array(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_entity_template']['addOutputDir'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'default'                 => true,
+			'eval'                    => array('submitOnChange' => true, 'tl_class' => 'w50'),
+			'sql'                     => "char(1) NOT NULL default '1'"
+		),
 		'outputDir' => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['outputDir'],
 			'exclude'   => true,
 			'inputType' => 'fileTree',
-			'eval'      => array('fieldType'=>'radio', 'tl_class'=>'w50'),
+			'eval'      => array('fieldType'=>'radio', 'mandatory' => true, 'tl_class'=>'w50'),
 			'sql'       => "binary(16) NULL"
 		),
 		'moduleName'        => array
@@ -155,7 +165,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['moduleName'],
 			'exclude'   => true,
 			'inputType' => 'text',
-			'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+			'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50 clr'),
 			'sql'       => "varchar(255) NOT NULL default ''"
 		),
 		'moduleNamespace'        => array
@@ -182,7 +192,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['addConfig'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
-			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50'),
+			'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50 clr'),
 			'sql'       => "char(1) NOT NULL default ''"
 		),
 		'configTemplate' => array
@@ -192,7 +202,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = array
 			'exclude'   => true,
 			'inputType' => 'select',
 			'options'   => \Controller::getTemplateGroup('eg_config_'),
-			'eval'      => array('mandatory' => true, 'tl_class' => 'w50 clr'),
+			'eval'      => array('mandatory' => true, 'tl_class' => 'w50'),
 			'sql'       => "varchar(255) NOT NULL default ''",
 		),
 		'addBackendModule'    => array

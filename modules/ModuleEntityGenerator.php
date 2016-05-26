@@ -21,10 +21,10 @@ class ModuleEntityGenerator
 	{
 		if (($objEntityTemplate = EntityTemplateModel::findByPk(\Input::get('id'))) !== null)
 		{
-			if ($objEntityTemplate->outputDir)
+			if ($objEntityTemplate->addOutputDir)
 				$objFolder = Files::getFolderFromUuid($objEntityTemplate->outputDir);
 			else
-				$objFolder = new \Folder('files', true);
+				$objFolder = new \Folder('system/modules', true);
 
 			// output dir
 			if (!$objFolder)
@@ -175,6 +175,8 @@ class ModuleEntityGenerator
 				}
 			}
 		}
+
+		\Message::addInfo($GLOBALS['TL_LANG']['MSC']['entity_generator']['updateDatabase']);
 
 		static::redirectToList();
 	}

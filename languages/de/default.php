@@ -8,6 +8,7 @@ $arrLang = &$GLOBALS['TL_LANG']['MSC']['entity_generator'];
 $arrLang['outputDirNotFound'] = 'Das Ausgabeverzeichnis dieser Vorlage wurde nicht gefunden.';
 $arrLang['assetsSuccessfullyGenerated'] = 'Der Assets-Ordner wurde erfolgreich erzeugt: "%s".';
 $arrLang['fileSuccessfullyGenerated'] = 'Die Datei "%s" wurde erfolgreich erzeugt.';
+$arrLang['updateDatabase'] = 'Ihr Modul wurde erfolgreich erzeugt. Denken Sie daran, vor der Benutzung ein <a style="text-decoration: underline;" href="contao/main.php?do=composer&update=database">Datenbank-Update</a> durchzuführen.';
 
 /**
  * Buttons

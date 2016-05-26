@@ -12,7 +12,8 @@ $arrLang['type']['dca'] = 'DCA';
 $arrLang['type']['language'] = 'Sprache';
 $arrLang['type']['model'] = 'Model';
 
-$arrLang['outputDir'] = array('Ausgabeverzeichnis', 'Wählen Sie hier das Ausgabeverzeichnis aus (z. B. "files/generated_modules"). In diesem wird ein Unterverzeichnis für das erstellte Modul erzeugt. Wird hier nichts ausgewählt, ist das Ausgabeverzeichnis "files".');
+$arrLang['addOutputDir'] = array('Eigenes Ausgabeverzeichnis auswählen', 'VORSICHT: Ist diese Option nicht aktiv, wird in "system/modules" ein Unterverzeichnis für das Modul erstellt erstellt.');
+$arrLang['outputDir'] = array('Ausgabeverzeichnis', 'Wählen Sie hier das Ausgabeverzeichnis aus (z. B. "files/generated_modules"). In diesem wird ein Unterverzeichnis für das erstellte Modul erzeugt.');
 $arrLang['moduleName'] = array('Name des Moduls', 'Geben Sie hier den Namen des Moduls ein, das durch die Vorlage erzeugt wird (z. B. "my_module").');
 $arrLang['moduleNamespace'] = array('Modul-Namespace', 'Geben Sie hier den Namespace ein, in dem das Modul liegen soll (z. B. "HeimrichHannot\MyModule").');
 $arrLang['addAssets'] = array('Assets-Ordner anlegen', 'Wählen Sie diese Option, um Assets-Ordner zu erstellen.');
