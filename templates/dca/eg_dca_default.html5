@@ -170,7 +170,7 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('doNotCopy'=>true, 'submitOnChange' => true),
-			'sql'                     => "char(1) NOT NULL default '0'"
+			'sql'                     => "char(1) NOT NULL default ''"
 		),
 		'start' => array
 		(
