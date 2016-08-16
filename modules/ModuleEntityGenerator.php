@@ -16,6 +16,8 @@ class ModuleEntityGenerator
 		'globalOperations',
 		'operations'
 	);
+	
+	protected static $arrLanguages = array('de', 'en');
 
 	public static function generate()
 	{
@@ -98,23 +100,29 @@ class ModuleEntityGenerator
 				// modules lang
 				if ($objEntityTemplate->addBackendModule)
 				{
-					$strTargetFile = $strTargetDir . '/languages/de/modules.php';
-					$arrData = array();
-
-					if ($objEntityTemplate->addDcas)
+					
+					foreach (static::$arrLanguages as $strLanguage)
 					{
-						foreach (deserialize($objEntityTemplate->dcas) as $intId)
+						
+						$strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/modules.php';
+						$arrData = array();
+						
+						if ($objEntityTemplate->addDcas)
 						{
-							if (($objDcaEntityTemplate = EntityTemplateModel::findByPk($intId)) !== null)
+							foreach (deserialize($objEntityTemplate->dcas) as $intId)
 							{
-								$arrData[$objDcaEntityTemplate->dcaName] = $objDcaEntityTemplate->localizedEntityNamePlural;
+								if (($objDcaEntityTemplate = EntityTemplateModel::findByPk($intId)) !== null)
+								{
+									$arrData[$objDcaEntityTemplate->dcaName] = $objDcaEntityTemplate->localizedEntityNamePlural;
+								}
 							}
 						}
+						
+						static::parseTemplate($strLanguage . '_'. $objEntityTemplate->modulesLangTemplate, $objEntityTemplate, $strTargetFile, array(
+							'dcaLocalizations' => $arrData
+						));
 					}
-
-					static::parseTemplate($objEntityTemplate->modulesLangTemplate, $objEntityTemplate, $strTargetFile, array(
-						'dcaLocalizations' => $arrData
-					));
+					
 				}
 			}
 
@@ -144,24 +152,34 @@ class ModuleEntityGenerator
 							'moduleName' => $objEntityTemplate->moduleName
 						));
 
-						// tl_user - language
-						$strTargetFile = $strTargetDir . '/languages/de/tl_user.php';
-						static::parseTemplate($objDcaEntityTemplate->userLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
-							'moduleName' => $objEntityTemplate->moduleName
-						));
-
-						// tl_user_group - language
-						$strTargetFile = $strTargetDir . '/languages/de/tl_user_group.php';
-						static::parseTemplate($objDcaEntityTemplate->userGroupLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
-							'moduleName' => $objEntityTemplate->moduleName
-						));
+						foreach (static::$arrLanguages as $strLanguage)
+						{
+							// tl_user_group - language
+							$strTargetFile = $strTargetDir . '/languages/' . $strLanguage .'/tl_user.php';
+							static::parseTemplate($strLanguage . '_'. $objDcaEntityTemplate->userLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
+								'moduleName' => $objEntityTemplate->moduleName
+							));
+						}
+						
+						foreach (static::$arrLanguages as $strLanguage)
+						{
+							// tl_user_group - language
+							$strTargetFile = $strTargetDir . '/languages/' . $strLanguage .'/tl_user_group.php';
+							static::parseTemplate($strLanguage . '_'. $objDcaEntityTemplate->userGroupLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
+								'moduleName' => $objEntityTemplate->moduleName
+							));
+						}
+						
 					}
 
 					// languages
 					if ($objDcaEntityTemplate->addLanguages)
 					{
-						$strTargetFile = $strTargetDir . '/languages/de/tl_' . $objDcaEntityTemplate->dcaName . '.php';
-						static::parseTemplate($objDcaEntityTemplate->dcaLangTemplate, $objDcaEntityTemplate, $strTargetFile);
+						foreach (static::$arrLanguages as $strLanguage)
+						{
+							$strTargetFile = $strTargetDir . '/languages/' . $strLanguage .'/tl_' . $objDcaEntityTemplate->dcaName . '.php';
+							static::parseTemplate($strLanguage . '_'. $objDcaEntityTemplate->dcaLangTemplate, $objDcaEntityTemplate, $strTargetFile);
+						}
 					}
 
 					// models
