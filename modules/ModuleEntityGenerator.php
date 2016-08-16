@@ -118,7 +118,9 @@ class ModuleEntityGenerator
 							}
 						}
 						
-						static::parseTemplate($strLanguage . '_'. $objEntityTemplate->modulesLangTemplate, $objEntityTemplate, $strTargetFile, array(
+						$strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
+						
+						static::parseTemplate($strPrefix . $objEntityTemplate->modulesLangTemplate, $objEntityTemplate, $strTargetFile, array(
 							'dcaLocalizations' => $arrData
 						));
 					}
@@ -154,18 +156,22 @@ class ModuleEntityGenerator
 
 						foreach (static::$arrLanguages as $strLanguage)
 						{
-							// tl_user_group - language
+							$strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
+							
+							// tl_user - language
 							$strTargetFile = $strTargetDir . '/languages/' . $strLanguage .'/tl_user.php';
-							static::parseTemplate($strLanguage . '_'. $objDcaEntityTemplate->userLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
+							static::parseTemplate($strPrefix . $objDcaEntityTemplate->userLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
 								'moduleName' => $objEntityTemplate->moduleName
 							));
 						}
 						
 						foreach (static::$arrLanguages as $strLanguage)
 						{
+							$strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
+							
 							// tl_user_group - language
 							$strTargetFile = $strTargetDir . '/languages/' . $strLanguage .'/tl_user_group.php';
-							static::parseTemplate($strLanguage . '_'. $objDcaEntityTemplate->userGroupLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
+							static::parseTemplate($strPrefix . $objDcaEntityTemplate->userGroupLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
 								'moduleName' => $objEntityTemplate->moduleName
 							));
 						}
@@ -177,8 +183,10 @@ class ModuleEntityGenerator
 					{
 						foreach (static::$arrLanguages as $strLanguage)
 						{
+							$strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
+							
 							$strTargetFile = $strTargetDir . '/languages/' . $strLanguage .'/tl_' . $objDcaEntityTemplate->dcaName . '.php';
-							static::parseTemplate($strLanguage . '_'. $objDcaEntityTemplate->dcaLangTemplate, $objDcaEntityTemplate, $strTargetFile);
+							static::parseTemplate($strPrefix . $objDcaEntityTemplate->dcaLangTemplate, $objDcaEntityTemplate, $strTargetFile);
 						}
 					}
 
