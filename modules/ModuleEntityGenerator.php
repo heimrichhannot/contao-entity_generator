@@ -8,291 +8,362 @@ use HeimrichHannot\Haste\Util\Files;
 class ModuleEntityGenerator
 {
 
-	protected static $arrMultiColumnWizardFields = array(
-		'sortingFields',
-		'onLoadCallbacks',
-		'onSubmitCallbacks',
-		'headerFields',
-		'globalOperations',
-		'operations'
-	);
-	
-	protected static $arrLanguages = array('de', 'en');
+    protected static $arrMultiColumnWizardFields = array(
+        'sortingFields',
+        'onLoadCallbacks',
+        'onSubmitCallbacks',
+        'headerFields',
+        'globalOperations',
+        'operations',
+    );
 
-	public static function generate()
-	{
-		if (($objEntityTemplate = EntityTemplateModel::findByPk(\Input::get('id'))) !== null)
-		{
-			if ($objEntityTemplate->addOutputDir)
-				$objFolder = Files::getFolderFromUuid($objEntityTemplate->outputDir);
-			else
-				$objFolder = new \Folder('system/modules', true);
+    protected static $arrLanguages = array('de', 'en');
 
-			// output dir
-			if (!$objFolder)
-			{
-				\Message::addError($GLOBALS['TL_LANG']['MSC']['entity_generator']['outputDirNotFound']);
-				static::redirectToList();
-			}
+    public static function generate()
+    {
+        if (($objEntityTemplate = EntityTemplateModel::findByPk(\Input::get('id'))) !== null)
+        {
+            if ($objEntityTemplate->addOutputDir)
+            {
+                $objFolder = Files::getFolderFromUuid($objEntityTemplate->outputDir);
+            }
+            else
+            {
+                $objFolder = new \Folder('system/modules', true);
+            }
 
-			static::prepareData($objEntityTemplate);
+            // output dir
+            if (!$objFolder)
+            {
+                \Message::addError($GLOBALS['TL_LANG']['MSC']['entity_generator']['outputDirNotFound']);
+                static::redirectToList();
+            }
 
-			// create module folder in output dir if not existing
-			$objTargetDir = new \Folder($objFolder->path . '/' . $objEntityTemplate->moduleName);
-			$strTargetDir = $objTargetDir->path;
+            static::prepareData($objEntityTemplate);
 
-			// assets
-			$objEntityTemplate->addAssets = deserialize($objEntityTemplate->addAssets, true);
+            // create module folder in output dir if not existing
+            $objTargetDir = new \Folder($objFolder->path . '/' . $objEntityTemplate->moduleName);
+            $strTargetDir = $objTargetDir->path;
 
-			if (!empty($objEntityTemplate->addAssets))
-			{
-				new \Folder($strTargetDir . '/assets');
+            // assets
+            $objEntityTemplate->addAssets = deserialize($objEntityTemplate->addAssets, true);
 
-				foreach ($objEntityTemplate->addAssets as $strType)
-				{
-					if ($strType == 'htaccess')
-					{
-						copy(
-							TL_ROOT . '/system/modules/entity_generator/templates/assets/htaccess.html5',
-							TL_ROOT . '/' . $strTargetDir . '/assets/.htaccess'
-						);
-					}
-					else
-						new \Folder($strTargetDir . '/assets/' . $strType);
-				}
+            if (!empty($objEntityTemplate->addAssets))
+            {
+                new \Folder($strTargetDir . '/assets');
 
-				\Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['assetsSuccessfullyGenerated'], $strTargetDir . '/assets/'));
-			}
+                foreach ($objEntityTemplate->addAssets as $strType)
+                {
+                    if ($strType == 'htaccess')
+                    {
+                        copy(
+                            TL_ROOT . '/system/modules/entity_generator/templates/assets/htaccess.html5',
+                            TL_ROOT . '/' . $strTargetDir . '/assets/.htaccess'
+                        );
+                    }
+                    else
+                    {
+                        new \Folder($strTargetDir . '/assets/' . $strType);
+                    }
+                }
 
-			// config
-			$objDcaEntityTemplates = static::getLinkedDcas($objEntityTemplate->id);
+                \Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['assetsSuccessfullyGenerated'], $strTargetDir . '/assets/'));
+            }
 
-			if ($objEntityTemplate->addConfig)
-			{
-				$arrData = array();
-				$blnAddUserPermissions = false;
+            // config
+            $objDcaEntityTemplates = static::getLinkedDcas($objEntityTemplate->id);
 
-				if ($objEntityTemplate->addDcas)
-				{
+            if ($objEntityTemplate->addConfig)
+            {
+                $arrData               = array();
+                $blnAddUserPermissions = false;
 
-					foreach ($objDcaEntityTemplates as $objDcaEntityTemplate)
-					{
-						if ($objDcaEntityTemplate->addModel)
-						{
-							$arrData[$objDcaEntityTemplate->dcaName] = array(
-								'entityClassName' => $objDcaEntityTemplate->entityClassName,
-								'addParentDca' => $objDcaEntityTemplate->addParentDca,
-								'parentDcaName' => EntityTemplateModel::findByPk($objDcaEntityTemplate->parentDca)->dcaName,
-							);
-						}
+                if ($objEntityTemplate->addDcas)
+                {
 
-						if ($objDcaEntityTemplate->addUserPermissions)
-							$blnAddUserPermissions = true;
-					}
-				}
+                    foreach ($objDcaEntityTemplates as $objDcaEntityTemplate)
+                    {
+                        if ($objDcaEntityTemplate->addModel)
+                        {
+                            $arrData[$objDcaEntityTemplate->dcaName] = array(
+                                'entityClassName' => $objDcaEntityTemplate->entityClassName,
+                                'addParentDca'    => $objDcaEntityTemplate->addParentDca,
+                                'parentDcaName'   => EntityTemplateModel::findByPk($objDcaEntityTemplate->parentDca)->dcaName,
+                            );
+                        }
 
-				$strTargetFile = $strTargetDir . '/config/config.php';
-				static::parseTemplate($objEntityTemplate->configTemplate, $objEntityTemplate, $strTargetFile, array(
-					'dcas' => $arrData,
-					'addUserPermissions' => $blnAddUserPermissions
-				));
+                        if ($objDcaEntityTemplate->addUserPermissions)
+                        {
+                            $blnAddUserPermissions = true;
+                        }
+                    }
+                }
 
-				// modules lang
-				if ($objEntityTemplate->addBackendModule)
-				{
-					
-					foreach (static::$arrLanguages as $strLanguage)
-					{
-						
-						$strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/modules.php';
-						$arrData = array();
-						
-						if ($objEntityTemplate->addDcas)
-						{
-							foreach (deserialize($objEntityTemplate->dcas) as $intId)
-							{
-								if (($objDcaEntityTemplate = EntityTemplateModel::findByPk($intId)) !== null)
-								{
-									$arrData[$objDcaEntityTemplate->dcaName] = $objDcaEntityTemplate->localizedEntityNamePlural;
-								}
-							}
-						}
-						
-						$strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
-						
-						static::parseTemplate($strPrefix . $objEntityTemplate->modulesLangTemplate, $objEntityTemplate, $strTargetFile, array(
-							'dcaLocalizations' => $arrData
-						));
-					}
-					
-				}
-			}
+                $strTargetFile = $strTargetDir . '/config/config.php';
+                static::parseTemplate(
+                    $objEntityTemplate->configTemplate,
+                    $objEntityTemplate,
+                    $strTargetFile,
+                    array(
+                        'dcas'               => $arrData,
+                        'addUserPermissions' => $blnAddUserPermissions,
+                    )
+                );
 
-			// dca
-			if ($objEntityTemplate->addDcas)
-			{
-				foreach ($objDcaEntityTemplates as $objDcaEntityTemplate)
-				{
-					static::prepareData($objDcaEntityTemplate);
+                // modules lang
+                if ($objEntityTemplate->addBackendModule)
+                {
 
-					// dca
-					$strTargetFile = $strTargetDir . '/dca/tl_' . $objDcaEntityTemplate->dcaName . '.php';
-					static::parseTemplate($objDcaEntityTemplate->dcaTemplate, $objDcaEntityTemplate, $strTargetFile);
+                    foreach (static::$arrLanguages as $strLanguage)
+                    {
 
-					// user permissions
-					if ($objDcaEntityTemplate->addUserPermissions)
-					{
-						// tl_user - dca
-						$strTargetFile = $strTargetDir . '/dca/tl_user.php';
-						static::parseTemplate($objDcaEntityTemplate->userTemplate, $objDcaEntityTemplate, $strTargetFile, array(
-							'moduleName' => $objEntityTemplate->moduleName
-						));
+                        $strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/modules.php';
+                        $arrData       = array();
 
-						// tl_user_group - dca
-						$strTargetFile = $strTargetDir . '/dca/tl_user_group.php';
-						static::parseTemplate($objDcaEntityTemplate->userGroupTemplate, $objDcaEntityTemplate, $strTargetFile, array(
-							'moduleName' => $objEntityTemplate->moduleName
-						));
+                        if ($objEntityTemplate->addDcas)
+                        {
+                            foreach (deserialize($objEntityTemplate->dcas) as $intId)
+                            {
+                                if (($objDcaEntityTemplate = EntityTemplateModel::findByPk($intId)) !== null)
+                                {
+                                    $arrData[$objDcaEntityTemplate->dcaName] = $objDcaEntityTemplate->localizedEntityNamePlural;
+                                }
+                            }
+                        }
 
-						foreach (static::$arrLanguages as $strLanguage)
-						{
-							$strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
-							
-							// tl_user - language
-							$strTargetFile = $strTargetDir . '/languages/' . $strLanguage .'/tl_user.php';
-							static::parseTemplate($strPrefix . $objDcaEntityTemplate->userLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
-								'moduleName' => $objEntityTemplate->moduleName
-							));
-						}
-						
-						foreach (static::$arrLanguages as $strLanguage)
-						{
-							$strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
-							
-							// tl_user_group - language
-							$strTargetFile = $strTargetDir . '/languages/' . $strLanguage .'/tl_user_group.php';
-							static::parseTemplate($strPrefix . $objDcaEntityTemplate->userGroupLanguageTemplate, $objDcaEntityTemplate, $strTargetFile, array(
-								'moduleName' => $objEntityTemplate->moduleName
-							));
-						}
-						
-					}
+                        $strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
 
-					// languages
-					if ($objDcaEntityTemplate->addLanguages)
-					{
-						foreach (static::$arrLanguages as $strLanguage)
-						{
-							$strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
-							
-							$strTargetFile = $strTargetDir . '/languages/' . $strLanguage .'/tl_' . $objDcaEntityTemplate->dcaName . '.php';
-							static::parseTemplate($strPrefix . $objDcaEntityTemplate->dcaLangTemplate, $objDcaEntityTemplate, $strTargetFile);
-						}
-					}
+                        \System::loadLanguageFile('default', $strLanguage);
 
-					// models
-					if ($objDcaEntityTemplate->addModel)
-					{
-						$strTargetFile = $strTargetDir . '/models/' . $objDcaEntityTemplate->entityClassName . 'Model.php';
-						static::parseTemplate($objDcaEntityTemplate->modelTemplate, $objDcaEntityTemplate, $strTargetFile, array(
-							'moduleNamespace' => $objEntityTemplate->moduleNamespace
-						));
-					}
-				}
-			}
-		}
+                        static::parseTemplate(
+                            $strPrefix . $objEntityTemplate->modulesLangTemplate,
+                            $objEntityTemplate,
+                            $strTargetFile,
+                            array(
+                                'dcaLocalizations' => $arrData,
+                            )
+                        );
 
-		\Message::addInfo($GLOBALS['TL_LANG']['MSC']['entity_generator']['updateDatabase']);
+                        \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE']);
+                    }
 
-		static::redirectToList();
-	}
+                }
+            }
 
-	public static function getLinkedDcas($intTemplate, array $arrDcas = array())
-	{
-		if (($objEntityTemplate = EntityTemplateModel::findByPk($intTemplate)) !== null)
-		{
-			if ($objEntityTemplate->type == 'module' && $objEntityTemplate->addDcas)
-			{
-				foreach (deserialize($objEntityTemplate->dcas, true) as $intId)
-				{
-					$arrDcas += static::getLinkedDcas($intId, $arrDcas);
-				}
-			}
+            // dca
+            if ($objEntityTemplate->addDcas)
+            {
+                foreach ($objDcaEntityTemplates as $objDcaEntityTemplate)
+                {
+                    static::prepareData($objDcaEntityTemplate);
 
-			if ($objEntityTemplate->type == 'dca')
-			{
-				if (!in_array($objEntityTemplate, $arrDcas))
-					$arrDcas[] = $objEntityTemplate;
+                    // dca
+                    $strTargetFile = $strTargetDir . '/dca/tl_' . $objDcaEntityTemplate->dcaName . '.php';
+                    static::parseTemplate($objDcaEntityTemplate->dcaTemplate, $objDcaEntityTemplate, $strTargetFile);
 
-				if ($objEntityTemplate->addParentDca)
-					$arrDcas += static::getLinkedDcas($objEntityTemplate->parentDca, $arrDcas);
-			}
-		}
+                    // user permissions
+                    if ($objDcaEntityTemplate->addUserPermissions)
+                    {
+                        // tl_user - dca
+                        $strTargetFile = $strTargetDir . '/dca/tl_user.php';
+                        static::parseTemplate(
+                            $objDcaEntityTemplate->userTemplate,
+                            $objDcaEntityTemplate,
+                            $strTargetFile,
+                            array(
+                                'moduleName' => $objEntityTemplate->moduleName,
+                            )
+                        );
 
-		return $arrDcas;
-	}
+                        // tl_user_group - dca
+                        $strTargetFile = $strTargetDir . '/dca/tl_user_group.php';
+                        static::parseTemplate(
+                            $objDcaEntityTemplate->userGroupTemplate,
+                            $objDcaEntityTemplate,
+                            $strTargetFile,
+                            array(
+                                'moduleName' => $objEntityTemplate->moduleName,
+                            )
+                        );
 
-	protected static function prepareData($objEntityTemplate)
-	{
-		if ($objEntityTemplate->addParentDca)
-		{
-			if (($objParent = EntityTemplateModel::findByPk($objEntityTemplate->parentDca)) !== null)
-			{
-				$objEntityTemplate->parentDcaName = $objParent->dcaName;
-			}
-		}
+                        foreach (static::$arrLanguages as $strLanguage)
+                        {
+                            $strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
 
-		// multicolumnwizard fields
-		foreach (static::$arrMultiColumnWizardFields as $strField)
-		{
-			$objEntityTemplate->{$strField} = deserialize($objEntityTemplate->{$strField}, true);
-			$objEntityTemplate->{$strField} = static::transformSingleDimensionalMcwArrays($strField, $objEntityTemplate->{$strField});
-		}
+                            // tl_user - language
+                            $strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/tl_user.php';
+                            \System::loadLanguageFile('default', $strLanguage);
 
-		// publish
-		if ($objEntityTemplate->addPublish && !in_array('toggle', $objEntityTemplate->operations))
-		{
-			$objEntityTemplate->operations = array_merge($objEntityTemplate->operations, array('toggle'));
-		}
-	}
+                            static::parseTemplate(
+                                $strPrefix . $objDcaEntityTemplate->userLanguageTemplate,
+                                $objDcaEntityTemplate,
+                                $strTargetFile,
+                                array(
+                                    'moduleName' => $objEntityTemplate->moduleName,
+                                )
+                            );
 
-	protected static function transformSingleDimensionalMcwArrays($strField, $arrData)
-	{
-		$arrColumnFields = $GLOBALS['TL_DCA']['tl_entity_template']['fields'][$strField]['eval']['columnFields'];
+                            \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE']);
+                        }
 
-		if (count($arrColumnFields) > 1)
-			return $arrData;
+                        foreach (static::$arrLanguages as $strLanguage)
+                        {
+                            $strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
 
-		$arrResult = array();
-		foreach ($arrData as $arrItem)
-			$arrResult[] = $arrItem[array_keys($arrColumnFields)[0]];
+                            // tl_user_group - language
+                            $strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/tl_user_group.php';
+                            \System::loadLanguageFile('default', $strLanguage);
 
-		return $arrResult;
-	}
+                            static::parseTemplate(
+                                $strPrefix . $objDcaEntityTemplate->userGroupLanguageTemplate,
+                                $objDcaEntityTemplate,
+                                $strTargetFile,
+                                array(
+                                    'moduleName' => $objEntityTemplate->moduleName,
+                                )
+                            );
 
-	protected static function redirectToList()
-	{
-		\Controller::redirect('contao/main.php?do=entity_generator');
-	}
+                            \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE']);
+                        }
 
-	protected static function parseTemplate($strTemplate, $objEntityTemplate, $strTargetFile, array $arrData = array())
-	{
-		if (!$strTemplate)
-			return;
+                    }
 
-		$objTemplate = new \BackendTemplate($strTemplate);
+                    // languages
+                    if ($objDcaEntityTemplate->addLanguages)
+                    {
+                        foreach (static::$arrLanguages as $strLanguage)
+                        {
+                            $strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
 
-		$objTemplate->setData($arrData + $objEntityTemplate->row());
+                            $strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/tl_' . $objDcaEntityTemplate->dcaName . '.php';
+                            \System::loadLanguageFile('default', $strLanguage);
 
-		$strResult = $objTemplate->parse();
+                            static::parseTemplate($strPrefix . $objDcaEntityTemplate->dcaLangTemplate, $objDcaEntityTemplate, $strTargetFile);
 
-		if ($strResult)
-		{
-			new \Folder(Files::getPathWithoutFilename($strTargetFile));
+                            \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE']);
+                        }
+                    }
 
-			if (file_put_contents(TL_ROOT . '/' . $strTargetFile, '<?php' . "\n\n" . $strResult) !== false)
-				\Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['fileSuccessfullyGenerated'], $strTargetFile));
-		}
-	}
+                    // models
+                    if ($objDcaEntityTemplate->addModel)
+                    {
+                        $strTargetFile = $strTargetDir . '/models/' . $objDcaEntityTemplate->entityClassName . 'Model.php';
+                        static::parseTemplate(
+                            $objDcaEntityTemplate->modelTemplate,
+                            $objDcaEntityTemplate,
+                            $strTargetFile,
+                            array(
+                                'moduleNamespace' => $objEntityTemplate->moduleNamespace,
+                            )
+                        );
+                    }
+                }
+            }
+        }
+
+        \Message::addInfo($GLOBALS['TL_LANG']['MSC']['entity_generator']['updateDatabase']);
+
+        static::redirectToList();
+    }
+
+    public static function getLinkedDcas($intTemplate, array $arrDcas = array())
+    {
+        if (($objEntityTemplate = EntityTemplateModel::findByPk($intTemplate)) !== null)
+        {
+            if ($objEntityTemplate->type == 'module' && $objEntityTemplate->addDcas)
+            {
+                foreach (deserialize($objEntityTemplate->dcas, true) as $intId)
+                {
+                    $arrDcas += static::getLinkedDcas($intId, $arrDcas);
+                }
+            }
+
+            if ($objEntityTemplate->type == 'dca')
+            {
+                if (!in_array($objEntityTemplate, $arrDcas))
+                {
+                    $arrDcas[] = $objEntityTemplate;
+                }
+
+                if ($objEntityTemplate->addParentDca)
+                {
+                    $arrDcas += static::getLinkedDcas($objEntityTemplate->parentDca, $arrDcas);
+                }
+            }
+        }
+
+        return $arrDcas;
+    }
+
+    protected static function prepareData($objEntityTemplate)
+    {
+        if ($objEntityTemplate->addParentDca)
+        {
+            if (($objParent = EntityTemplateModel::findByPk($objEntityTemplate->parentDca)) !== null)
+            {
+                $objEntityTemplate->parentDcaName = $objParent->dcaName;
+            }
+        }
+
+        // multicolumnwizard fields
+        foreach (static::$arrMultiColumnWizardFields as $strField)
+        {
+            $objEntityTemplate->{$strField} = deserialize($objEntityTemplate->{$strField}, true);
+            $objEntityTemplate->{$strField} = static::transformSingleDimensionalMcwArrays($strField, $objEntityTemplate->{$strField});
+        }
+
+        // publish
+        if ($objEntityTemplate->addPublish && !in_array('toggle', $objEntityTemplate->operations))
+        {
+            $objEntityTemplate->operations = array_merge($objEntityTemplate->operations, array('toggle'));
+        }
+    }
+
+    protected static function transformSingleDimensionalMcwArrays($strField, $arrData)
+    {
+        $arrColumnFields = $GLOBALS['TL_DCA']['tl_entity_template']['fields'][$strField]['eval']['columnFields'];
+
+        if (count($arrColumnFields) > 1)
+        {
+            return $arrData;
+        }
+
+        $arrResult = array();
+        foreach ($arrData as $arrItem)
+        {
+            $arrResult[] = $arrItem[array_keys($arrColumnFields)[0]];
+        }
+
+        return $arrResult;
+    }
+
+    protected static function redirectToList()
+    {
+        \Controller::redirect('contao/main.php?do=entity_generator');
+    }
+
+    protected static function parseTemplate($strTemplate, $objEntityTemplate, $strTargetFile, array $arrData = array())
+    {
+        if (!$strTemplate)
+        {
+            return;
+        }
+
+        $objTemplate = new \BackendTemplate($strTemplate);
+
+        $objTemplate->setData($arrData + $objEntityTemplate->row());
+
+        $strResult = $objTemplate->parse();
+
+        if ($strResult)
+        {
+            new \Folder(Files::getPathWithoutFilename($strTargetFile));
+
+            if (file_put_contents(TL_ROOT . '/' . $strTargetFile, '<?php' . "\n\n" . $strResult) !== false)
+            {
+                \Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['fileSuccessfullyGenerated'], $strTargetFile));
+            }
+        }
+    }
 
 }
