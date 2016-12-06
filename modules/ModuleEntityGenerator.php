@@ -133,7 +133,7 @@ class ModuleEntityGenerator
 
                         $strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
 
-                        \System::loadLanguageFile('default', $strLanguage);
+                        \System::loadLanguageFile('default', $strLanguage, true);
 
                         static::parseTemplate(
                             $strPrefix . $objEntityTemplate->modulesLangTemplate,
@@ -144,7 +144,7 @@ class ModuleEntityGenerator
                             )
                         );
 
-                        \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE']);
+                        \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE'], true);
                     }
 
                 }
@@ -192,7 +192,7 @@ class ModuleEntityGenerator
 
                             // tl_user - language
                             $strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/tl_user.php';
-                            \System::loadLanguageFile('default', $strLanguage);
+                            \System::loadLanguageFile('default', $strLanguage, true);
 
                             static::parseTemplate(
                                 $strPrefix . $objDcaEntityTemplate->userLanguageTemplate,
@@ -203,7 +203,7 @@ class ModuleEntityGenerator
                                 )
                             );
 
-                            \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE']);
+                            \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE'], true);
                         }
 
                         foreach (static::$arrLanguages as $strLanguage)
@@ -212,7 +212,7 @@ class ModuleEntityGenerator
 
                             // tl_user_group - language
                             $strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/tl_user_group.php';
-                            \System::loadLanguageFile('default', $strLanguage);
+                            \System::loadLanguageFile('default', $strLanguage, true);
 
                             static::parseTemplate(
                                 $strPrefix . $objDcaEntityTemplate->userGroupLanguageTemplate,
@@ -223,7 +223,7 @@ class ModuleEntityGenerator
                                 )
                             );
 
-                            \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE']);
+                            \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE'], true);
                         }
 
                     }
@@ -236,11 +236,11 @@ class ModuleEntityGenerator
                             $strPrefix = $strLanguage != 'en' ? $strLanguage . '_' : '';
 
                             $strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/tl_' . $objDcaEntityTemplate->dcaName . '.php';
-                            \System::loadLanguageFile('default', $strLanguage);
+                            \System::loadLanguageFile('default', $strLanguage, true);
 
                             static::parseTemplate($strPrefix . $objDcaEntityTemplate->dcaLangTemplate, $objDcaEntityTemplate, $strTargetFile);
 
-                            \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE']);
+                            \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE'], true);
                         }
                     }
 
