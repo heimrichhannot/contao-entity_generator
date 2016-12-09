@@ -89,7 +89,6 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName; ?>'] = array
 				'href'                => 'table=tl_<?= $this->childDcaName ?>',
 				'icon'                => 'edit.gif'
 			),
-<?php elseif ($strAct == 'editheader'): ?>
 			'editheader' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName; ?>']['editheader'],
@@ -124,9 +123,11 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName; ?>'] = array
 		'__selector__' => array(<?php if ($this->addPublish): ?>'published'<?php endif; ?>),
 		'default' => '<?php if ($this->addTitle): ?>{general_legend},title;<?php endif; ?><?php if ($this->addPublish): ?>{publish_legend},published;<?php endif; ?>'
 	),
+<?php if ($this->addPublish): ?>
 	'subpalettes' => array(
 		'published'	=> 'start,stop'
 	),
+<?php endif; ?>
 	'fields'   => array
 	(
 		'id' => array

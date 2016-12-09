@@ -58,7 +58,7 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 <?php if ($this->addHeaderFields): ?>
 			'headerFields'          => array(<?php foreach ($this->headerFields as $intId => $strField): ?>'<?= $strField ?>'<?php if ($intId != count($this->headerFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>),
 <?php endif; ?>
-			'panelLayout'           => 'filter;search,limit'<?php if ($this->addParentDca): ?>,
+			'panelLayout'           => 'filter;sort,search,limit'<?php if ($this->addParentDca): ?>,
 			<?php if ($this->sortingMode): ?>'child_record_callback' => array('tl_<?= $this->dcaName ?>', 'listChildren')<?php endif; ?>
 <?php endif; ?>
 
@@ -119,9 +119,11 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 		'__selector__' => array(<?php if ($this->addPublish): ?>'published'<?php endif; ?>),
 		'default' => '<?php if ($this->addTitle): ?>{general_legend},title;<?php endif; ?><?php if ($this->addPublish): ?>{publish_legend},published;<?php endif; ?>'
 	),
+<?php if ($this->addPublish): ?>
 	'subpalettes' => array(
 		'published'	=> 'start,stop'
 	),
+<?php endif; ?>
 	'fields'   => array
 	(
 		'id' => array
