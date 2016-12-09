@@ -136,7 +136,7 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
 			'foreignKey'              => 'tl_<?= $this->parentDcaName ?>.<?= $this->parentDcaForeignKey ?>',
 			'sql'                     => "int(10) unsigned NOT NULL default '0'",
 			'relation'                => array('type'=>'belongsTo', 'load'=>'eager')
-		),
+		),start
 <?php endif; ?>
 		'tstamp' => array
 		(
@@ -337,7 +337,7 @@ class tl_<?= $this->dcaName ?> extends \Backend
 			$icon = 'invisible.gif';
 		}
 
-		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
+		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ';
 	}
 
 	public function toggleVisibility($intId, $blnVisible)
