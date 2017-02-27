@@ -8,16 +8,16 @@ use HeimrichHannot\Haste\Util\Files;
 class ModuleEntityGenerator
 {
 
-    protected static $arrMultiColumnWizardFields = array(
+    protected static $arrMultiColumnWizardFields = [
         'sortingFields',
         'onLoadCallbacks',
         'onSubmitCallbacks',
         'headerFields',
         'globalOperations',
         'operations',
-    );
+    ];
 
-    protected static $arrLanguages = array('de', 'en');
+    protected static $arrLanguages = ['de', 'en'];
 
     public static function generate()
     {
@@ -67,7 +67,9 @@ class ModuleEntityGenerator
                     }
                 }
 
-                \Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['assetsSuccessfullyGenerated'], $strTargetDir . '/assets/'));
+                \Message::addConfirmation(
+                    sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['assetsSuccessfullyGenerated'], $strTargetDir . '/assets/')
+                );
             }
 
             // config
@@ -75,7 +77,7 @@ class ModuleEntityGenerator
 
             if ($objEntityTemplate->addConfig)
             {
-                $arrData               = array();
+                $arrData               = [];
                 $blnAddUserPermissions = false;
 
                 if ($objEntityTemplate->addDcas)
@@ -85,11 +87,11 @@ class ModuleEntityGenerator
                     {
                         if ($objDcaEntityTemplate->addModel)
                         {
-                            $arrData[$objDcaEntityTemplate->dcaName] = array(
+                            $arrData[$objDcaEntityTemplate->dcaName] = [
                                 'entityClassName' => $objDcaEntityTemplate->entityClassName,
                                 'addParentDca'    => $objDcaEntityTemplate->addParentDca,
                                 'parentDcaName'   => EntityTemplateModel::findByPk($objDcaEntityTemplate->parentDca)->dcaName,
-                            );
+                            ];
                         }
 
                         if ($objDcaEntityTemplate->addUserPermissions)
@@ -104,10 +106,10 @@ class ModuleEntityGenerator
                     $objEntityTemplate->configTemplate,
                     $objEntityTemplate,
                     $strTargetFile,
-                    array(
+                    [
                         'dcas'               => $arrData,
                         'addUserPermissions' => $blnAddUserPermissions,
-                    )
+                    ]
                 );
 
                 // modules lang
@@ -118,7 +120,7 @@ class ModuleEntityGenerator
                     {
 
                         $strTargetFile = $strTargetDir . '/languages/' . $strLanguage . '/modules.php';
-                        $arrData       = array();
+                        $arrData       = [];
 
                         if ($objEntityTemplate->addDcas)
                         {
@@ -139,9 +141,9 @@ class ModuleEntityGenerator
                             $strPrefix . $objEntityTemplate->modulesLangTemplate,
                             $objEntityTemplate,
                             $strTargetFile,
-                            array(
+                            [
                                 'dcaLocalizations' => $arrData,
-                            )
+                            ]
                         );
 
                         \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE'], true);
@@ -159,7 +161,14 @@ class ModuleEntityGenerator
 
                     // dca
                     $strTargetFile = $strTargetDir . '/dca/tl_' . $objDcaEntityTemplate->dcaName . '.php';
-                    static::parseTemplate($objDcaEntityTemplate->dcaTemplate, $objDcaEntityTemplate, $strTargetFile);
+                    static::parseTemplate(
+                        $objDcaEntityTemplate->dcaTemplate,
+                        $objDcaEntityTemplate,
+                        $strTargetFile,
+                        [
+                            'moduleName' => $objEntityTemplate->moduleName,
+                        ]
+                    );
 
                     // user permissions
                     if ($objDcaEntityTemplate->addUserPermissions)
@@ -170,9 +179,9 @@ class ModuleEntityGenerator
                             $objDcaEntityTemplate->userTemplate,
                             $objDcaEntityTemplate,
                             $strTargetFile,
-                            array(
+                            [
                                 'moduleName' => $objEntityTemplate->moduleName,
-                            )
+                            ]
                         );
 
                         // tl_user_group - dca
@@ -181,9 +190,9 @@ class ModuleEntityGenerator
                             $objDcaEntityTemplate->userGroupTemplate,
                             $objDcaEntityTemplate,
                             $strTargetFile,
-                            array(
+                            [
                                 'moduleName' => $objEntityTemplate->moduleName,
-                            )
+                            ]
                         );
 
                         foreach (static::$arrLanguages as $strLanguage)
@@ -198,9 +207,9 @@ class ModuleEntityGenerator
                                 $strPrefix . $objDcaEntityTemplate->userLanguageTemplate,
                                 $objDcaEntityTemplate,
                                 $strTargetFile,
-                                array(
+                                [
                                     'moduleName' => $objEntityTemplate->moduleName,
-                                )
+                                ]
                             );
 
                             \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE'], true);
@@ -218,9 +227,9 @@ class ModuleEntityGenerator
                                 $strPrefix . $objDcaEntityTemplate->userGroupLanguageTemplate,
                                 $objDcaEntityTemplate,
                                 $strTargetFile,
-                                array(
+                                [
                                     'moduleName' => $objEntityTemplate->moduleName,
-                                )
+                                ]
                             );
 
                             \System::loadLanguageFile('default', $GLOBALS['TL_LANGUAGE'], true);
@@ -252,9 +261,9 @@ class ModuleEntityGenerator
                             $objDcaEntityTemplate->modelTemplate,
                             $objDcaEntityTemplate,
                             $strTargetFile,
-                            array(
+                            [
                                 'moduleNamespace' => $objEntityTemplate->moduleNamespace,
-                            )
+                            ]
                         );
                     }
                 }
@@ -266,7 +275,7 @@ class ModuleEntityGenerator
         static::redirectToList();
     }
 
-    public static function getLinkedDcas($intTemplate, array $arrDcas = array())
+    public static function getLinkedDcas($intTemplate, array $arrDcas = [])
     {
         if (($objEntityTemplate = EntityTemplateModel::findByPk($intTemplate)) !== null)
         {
@@ -315,7 +324,7 @@ class ModuleEntityGenerator
         // publish
         if ($objEntityTemplate->addPublish && !in_array('toggle', $objEntityTemplate->operations))
         {
-            $objEntityTemplate->operations = array_merge($objEntityTemplate->operations, array('toggle'));
+            $objEntityTemplate->operations = array_merge($objEntityTemplate->operations, ['toggle']);
         }
     }
 
@@ -328,7 +337,7 @@ class ModuleEntityGenerator
             return $arrData;
         }
 
-        $arrResult = array();
+        $arrResult = [];
         foreach ($arrData as $arrItem)
         {
             $arrResult[] = $arrItem[array_keys($arrColumnFields)[0]];
@@ -342,7 +351,7 @@ class ModuleEntityGenerator
         \Controller::redirect('contao/main.php?do=entity_generator');
     }
 
-    protected static function parseTemplate($strTemplate, $objEntityTemplate, $strTargetFile, array $arrData = array())
+    protected static function parseTemplate($strTemplate, $objEntityTemplate, $strTargetFile, array $arrData = [])
     {
         if (!$strTemplate)
         {
