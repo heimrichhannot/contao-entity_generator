@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.0.17] - 2017-07-19
+
+### Added
+- PHP 7 compatibility
+
 ## [2.0.16] - 2017-06-30
 
 ### Fixed
