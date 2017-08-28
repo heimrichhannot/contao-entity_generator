@@ -8,7 +8,7 @@ use HeimrichHannot\Haste\Util\Files;
 class ModuleEntityGenerator
 {
 
-    protected static $arrMultiColumnWizardFields = [
+    protected static $arrMultiColumnEditorFields = [
         'sortingFields',
         'onLoadCallbacks',
         'onSubmitCallbacks',
@@ -314,8 +314,8 @@ class ModuleEntityGenerator
             }
         }
 
-        // multicolumnwizard fields
-        foreach (static::$arrMultiColumnWizardFields as $strField)
+        // multi column editor fields
+        foreach (static::$arrMultiColumnEditorFields as $strField)
         {
             $objEntityTemplate->{$strField} = deserialize($objEntityTemplate->{$strField}, true);
             $objEntityTemplate->{$strField} = static::transformSingleDimensionalMceArrays($strField, $objEntityTemplate->{$strField});

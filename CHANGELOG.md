@@ -1,14 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.1] - 2017-08-28
+
+### Fixed
+- deps
+
 ## [3.0.0] - 2017-08-28
 
 ### Added
 - Contao 4 compatibility
-
-### Changed
-- to short array syntax
-- spaces for indentation
 
 ## [2.0.17] - 2017-07-19
 
