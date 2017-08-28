@@ -13,10 +13,10 @@ $arrLang['updateDatabase'] = 'Ihr Modul wurde erfolgreich erzeugt. Denken Sie da
 /**
  * Buttons
  */
-$arrLang['new'] = array('Neues %s', '%s erstellen');
-$arrLang['show'] = array('%s Details', '%s-Details ID %s anzeigen');
-$arrLang['edit'] = array('%s bearbeiten', '%s ID %s bearbeiten');
-$arrLang['editheader'] = array('%s-Einstellungen bearbeiten', '%s-Einstellungen ID %s bearbeiten');
-$arrLang['copy'] = array('%s duplizieren', '%s ID %s duplizieren');
-$arrLang['delete'] = array('%s löschen', '%s ID %s löschen');
-$arrLang['toggle'] = array('%s veröffentlichen', '%s ID %s veröffentlichen/verstecken');
+$arrLang['new'] = ['Neues %s', '%s erstellen'];
+$arrLang['show'] = ['%s Details', '%s-Details ID %s anzeigen'];
+$arrLang['edit'] = ['%s bearbeiten', '%s ID %s bearbeiten'];
+$arrLang['editheader'] = ['%s-Einstellungen bearbeiten', '%s-Einstellungen ID %s bearbeiten'];
+$arrLang['copy'] = ['%s duplizieren', '%s ID %s duplizieren'];
+$arrLang['delete'] = ['%s löschen', '%s ID %s löschen'];
+$arrLang['toggle'] = ['%s veröffentlichen', '%s ID %s veröffentlichen/verstecken'];

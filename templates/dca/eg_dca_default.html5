@@ -1,377 +1,425 @@
-$GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = array
-(
-	'config'   => array
-	(
-		'dataContainer'     => '<?= $this->dataContainer ?>',
+$GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = [
+    'config'   => [
+        'dataContainer'     => '<?= $this->dataContainer ?>',
 <?php if ($this->addParentDca): ?>
-		'ptable'            => 'tl_<?= $this->parentDcaName ?>',
+        'ptable'            => 'tl_<?= $this->parentDcaName ?>',
 <?php endif; if ($this->childDcaName): ?>
-		'ctable'            => 'tl_<?= $this->childDcaName ?>',
+        'ctable'            => 'tl_<?= $this->childDcaName ?>',
 <?php endif; ?>
-		'enableVersioning'  => <?= $this->enableVersioning ? 'true' : 'false' ?>,
+        'enableVersioning'  => <?= $this->enableVersioning ? 'true' : 'false' ?>,
 <?php if ($this->addParentDca || $this->addOnLoadCallbacks): ?>
-		'onload_callback' => array
-		(
+        'onload_callback' => [
 <?php endif; ?>
 <?php if ($this->addParentDca): ?>
-			array('tl_<?= $this->dcaName ?>', 'checkPermission'),
+            ['tl_<?= $this->dcaName ?>', 'checkPermission'],
 <?php endif; ?>
 <?php if ($this->addOnLoadCallbacks): ?>
-<?php foreach ($this->onLoadCallbacks as $intId => $arrCallback): ?>			array('<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>')<?php if ($intId != count($this->onLoadCallbacks) - 1): ?>,
+<?php foreach ($this->onLoadCallbacks as $intId => $arrCallback): ?>            ['<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>']<?php if ($intId != count($this->onLoadCallbacks) - 1): ?>,
 <?php endif; ?><?php endforeach; ?>
 
 <?php endif; ?>
 <?php if ($this->addParentDca || $this->addOnLoadCallbacks): ?>
-		),
+        ],
 <?php endif; ?>
-		'onsubmit_callback' => array
-		(
-			array('HeimrichHannot\Haste\Dca\General', 'setDateAdded'),
+        'onsubmit_callback' => [
+            ['HeimrichHannot\Haste\Dca\General', 'setDateAdded'],
 <?php if ($this->addOnSubmitCallbacks): ?>
-<?php foreach ($this->onSubmitCallbacks as $intId => $arrCallback): ?>			array('<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>')<?php if ($intId != count($this->onSubmitCallbacks) - 1): ?>,
+<?php foreach ($this->onSubmitCallbacks as $intId => $arrCallback): ?>            ['<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>']<?php if ($intId != count($this->onSubmitCallbacks) - 1): ?>,
 <?php endif; ?><?php endforeach; ?>
 
 <?php endif; ?>
-		),
-		'sql' => array
-		(
-			'keys' => array
-			(
-				'id' => 'primary'<?php if ($this->addParentDca && $this->addPublish): ?>,
-				'pid,start,stop,published' => 'index'<?php endif; ?>
-			)
-		)
-	),
-	'list'     => array
-	(
-		'label' => array
-		(
-			'fields' => array('id'),
-			'format' => '%s'
-		),
-		'sorting'           => array
-		(
-			'mode'                  => <?= $this->sortingMode ?>,
+        ],
+        'sql' => [
+            'keys' => [
+                'id' => 'primary'<?php if ($this->addParentDca && $this->addPublish): ?>,
+                'pid,start,stop,published' => 'index'<?php endif; ?>
+            ]
+        ]
+    ],
+    'list'     => [
+        'label' => [
+            'fields' => ['id'],
+            'format' => '%s'
+        ],
+        'sorting'           => [
+            'mode'                  => <?= $this->sortingMode ?>,
 <?php if ($this->addSortingFields): ?>
-			'fields'                => array(<?php foreach ($this->sortingFields as $intId => $arrField): ?>'<?= $arrField['field'] ?><?= $arrField['sorting'] == 'ASC' ? ' ' . $arrField['sorting'] == 'ASC' : '' ?>'<?php if ($intId != count($this->sortingFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>),
+            'fields'                => [<?php foreach ($this->sortingFields as $intId => $arrField): ?>'<?= $arrField['field'] ?><?= $arrField['sorting'] == 'ASC' ? ' ' . $arrField['sorting'] == 'ASC' : '' ?>'<?php if ($intId != count($this->sortingFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>],
 <?php endif; ?>
 <?php if ($this->addHeaderFields): ?>
-			'headerFields'          => array(<?php foreach ($this->headerFields as $intId => $strField): ?>'<?= $strField ?>'<?php if ($intId != count($this->headerFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>),
+            'headerFields'          => [<?php foreach ($this->headerFields as $intId => $strField): ?>'<?= $strField ?>'<?php if ($intId != count($this->headerFields) - 1): ?>, <?php endif; ?><?php endforeach; ?>],
 <?php endif; ?>
-			'panelLayout'           => 'filter;sort,search,limit'<?php if ($this->addParentDca): ?>,
-			<?php if ($this->sortingMode): ?>'child_record_callback' => array('tl_<?= $this->dcaName ?>', 'listChildren')<?php endif; ?>
+            'panelLayout'           => 'filter;sort,search,limit'<?php if ($this->addParentDca): ?>,
+            <?php if ($this->sortingMode): ?>'child_record_callback' => ['tl_<?= $this->dcaName ?>', 'listChildren']<?php endif; ?>
 <?php endif; ?>
 
-		),
-		'global_operations' => array
-		(
+        ],
+        'global_operations' => [
 <?php if ($this->addGlobalOperations) foreach ($this->globalOperations as $strAct): ?>
 <?php if ($strAct == 'all'): ?>
-			'all'    => array
-			(
-				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'       => 'act=select',
-				'class'      => 'header_edit_all',
-				'attributes' => 'onclick="Backend.getScrollOffset();"'
-			),
+            'all'    => [
+                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'       => 'act=select',
+                'class'      => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset();"'
+            ],
 <?php else: ?>
-			'<?= $strAct ?>'    => array
-			(
-				'label'      => &$GLOBALS['TL_LANG']['MSC']['<?= $strAct ?>'],
-				'href'       => 'act=<?= $strAct ?>',
-				'class'      => 'header_<?= $strAct ?>',
-				'attributes' => 'onclick="Backend.getScrollOffset();"'
-			),
+            '<?= $strAct ?>'    => [
+                'label'      => &$GLOBALS['TL_LANG']['MSC']['<?= $strAct ?>'],
+                'href'       => 'act=<?= $strAct ?>',
+                'class'      => 'header_<?= $strAct ?>',
+                'attributes' => 'onclick="Backend.getScrollOffset();"'
+            ],
 <?php endif ?>
 <?php endforeach ?>
-		),
-		'operations' => array
-		(
+        ],
+        'operations' => [
 <?php if ($this->addOperations) foreach ($this->operations as $strAct): ?>
 <?php if ($strAct == 'delete'): ?>
-			'delete' => array
-			(
-				'label'      => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['delete'],
-				'href'       => 'act=delete',
-				'icon'       => 'delete.gif',
-				'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
-			),
+            'delete' => [
+                'label'      => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['delete'],
+                'href'       => 'act=delete',
+                'icon'       => 'delete.gif',
+                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
+            ],
 <?php elseif ($strAct == 'toggle'): ?>
-			'toggle' => array
-			(
-				'label'           => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['toggle'],
-				'icon'            => 'visible.gif',
-				'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-				'button_callback' => array('tl_<?= $this->dcaName ?>', 'toggleIcon')
-			),
+            'toggle' => [
+                'label'           => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['toggle'],
+                'icon'            => 'visible.gif',
+                'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+                'button_callback' => ['tl_<?= $this->dcaName ?>', 'toggleIcon']
+            ],
 <?php else: ?>
-			'<?= $strAct ?>'   => array
-			(
-				'label' => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['<?= $strAct ?>'],
-				'href'  => 'act=<?= $strAct ?>',
-				'icon'  => '<?= $strAct ?>.gif'
-			),
+            '<?= $strAct ?>'   => [
+                'label' => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['<?= $strAct ?>'],
+                'href'  => 'act=<?= $strAct ?>',
+                'icon'  => '<?= $strAct ?>.gif'
+            ],
 <?php endif; ?>
 <?php endforeach; ?>
-		)
-	),
-	'palettes' => array(
-		'__selector__' => array(<?php if ($this->addPublish): ?>'published'<?php endif; ?>),
-		'default' => '<?php if ($this->addTitle): ?>{general_legend},title;<?php endif; ?><?php if ($this->addPublish): ?>{publish_legend},published;<?php endif; ?>'
-	),
+        ]
+    ],
+    'palettes' => [
+        '__selector__' => [<?php if ($this->addPublish): ?>'published'<?php endif; ?>],
+        'default' => '<?php if ($this->addTitle): ?>{general_legend},title;<?php endif; ?><?php if ($this->addPublish): ?>{publish_legend},published;<?php endif; ?>'
+    ],
 <?php if ($this->addPublish): ?>
-	'subpalettes' => array(
-		'published'	=> 'start,stop'
-	),
+    'subpalettes' => [
+        'published'    => 'start,stop'
+    ],
 <?php endif; ?>
-	'fields'   => array
-	(
-		'id' => array
-		(
-			'sql'                     => "int(10) unsigned NOT NULL auto_increment"
-		),
+    'fields'   => [
+        'id' => [
+            'sql'                     => "int(10) unsigned NOT NULL auto_increment"
+        ],
 <?php if ($this->addParentDca): ?>
-		'pid' => array
-		(
-			'foreignKey'              => 'tl_<?= $this->parentDcaName ?>.<?= $this->parentDcaForeignKey ?>',
-			'sql'                     => "int(10) unsigned NOT NULL default '0'",
-			'relation'                => array('type'=>'belongsTo', 'load'=>'eager')
-		),
+        'pid' => [
+            'foreignKey'              => 'tl_<?= $this->parentDcaName ?>.<?= $this->parentDcaForeignKey ?>',
+            'sql'                     => "int(10) unsigned NOT NULL default '0'",
+            'relation'                => ['type'=>'belongsTo', 'load'=>'eager']
+        ],
 <?php endif; ?>
-		'tstamp' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['tstamp'],
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
-		),
-		'dateAdded' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
-			'sorting'                 => true,
-			'flag'                    => 6,
-			'eval'                    => array('rgxp'=>'datim', 'doNotCopy' => true),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
-		),
+        'tstamp' => [
+            'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['tstamp'],
+            'sql'                     => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'dateAdded' => [
+            'label'                   => &$GLOBALS['TL_LANG']['MSC']['dateAdded'],
+            'sorting'                 => true,
+            'flag'                    => 6,
+            'eval'                    => ['rgxp'=>'datim', 'doNotCopy' => true],
+            'sql'                     => "int(10) unsigned NOT NULL default '0'"
+        ],
 <?php if ($this->addTitle): ?>
-		'title' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['title'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory' => true, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
+        'title' => [
+            'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['title'],
+            'exclude'                 => true,
+            'search'                  => true,
+            'sorting'                 => true,
+            'flag'                    => 1,
+            'inputType'               => 'text',
+            'eval'                    => ['mandatory' => true, 'tl_class'=>'w50'],
+            'sql'                     => "varchar(255) NOT NULL default ''"
+        ],
 <?php endif; ?>
 <?php if ($this->addPublish): ?>
-		'published' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['published'],
-			'exclude'                 => true,
-			'filter'                  => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('doNotCopy'=>true, 'submitOnChange' => true),
-			'sql'                     => "char(1) NOT NULL default ''"
-		),
-		'start' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['start'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
-			'sql'                     => "varchar(10) NOT NULL default ''"
-		),
-		'stop' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['stop'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
-			'sql'                     => "varchar(10) NOT NULL default ''"
-		)
+        'published' => [
+            'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['published'],
+            'exclude'                 => true,
+            'filter'                  => true,
+            'inputType'               => 'checkbox',
+            'eval'                    => ['doNotCopy'=>true, 'submitOnChange' => true],
+            'sql'                     => "char(1) NOT NULL default ''"
+        ],
+        'start' => [
+            'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['start'],
+            'exclude'                 => true,
+            'inputType'               => 'text',
+            'eval'                    => ['rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'],
+            'sql'                     => "varchar(10) NOT NULL default ''"
+        ],
+        'stop' => [
+            'label'                   => &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>']['stop'],
+            'exclude'                 => true,
+            'inputType'               => 'text',
+            'eval'                    => ['rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'],
+            'sql'                     => "varchar(10) NOT NULL default ''"
+        ]
 <?php endif; ?>
-	)
-);
+    ]
+];
 
 
 class tl_<?= $this->dcaName ?> extends \Backend
 {
 <?php if ($this->addParentDca): ?>
 
-	public function listChildren($arrRow)
-	{
-		return '<div class="tl_content_left">' . ($arrRow['title'] ?: $arrRow['id']) . ' <span style="color:#b3b3b3; padding-left:3px">[' .
-				\Date::parse(Config::get('datimFormat'), trim($arrRow['dateAdded'])) . ']</span></div>';
-	}
+    public function listChildren($arrRow)
+    {
+        return '<div class="tl_content_left">' . ($arrRow['title'] ?: $arrRow['id']) . ' <span style="color:#b3b3b3; padding-left:3px">[' .
+                \Date::parse(Config::get('datimFormat'), trim($arrRow['dateAdded'])) . ']</span></div>';
+    }
 
-	public function checkPermission()
-	{
-		$objUser = \BackendUser::getInstance();
-		$objSession = \Session::getInstance();
-		$objDatabase = \Database::getInstance();
+    public function checkPermission()
+    {
+        $user = \BackendUser::getInstance();
+        $database = \Database::getInstance();
+        $bundles = \System::getContainer()->getParameter('kernel.bundles');
 
-		if ($objUser->isAdmin)
-		{
-			return;
-		}
+        // HOOK: comments extension required
+        if (!isset($bundles['ContaoCommentsBundle']))
+        {
+            $key = array_search('allowComments', $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['list']['sorting']['headerFields']);
+            unset($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['list']['sorting']['headerFields'][$key]);
+        }
 
-		// Set the root IDs
-		if (!is_array($objUser-><?= $this->moduleName; ?>s) || empty($objUser-><?= $this->moduleName; ?>s))
-		{
-			$root = array(0);
-		}
-		else
-		{
-			$root = $objUser-><?= $this->moduleName; ?>s;
-		}
+        if ($user->isAdmin)
+        {
+            return;
+        }
 
-		$id = strlen(Input::get('id')) ? Input::get('id') : CURRENT_ID;
+        // Set the root IDs
+        if (!is_array($user-><?= $this->moduleName; ?>s) || empty($user-><?= $this->moduleName; ?>s))
+        {
+            $root = [0];
+        }
+        else
+        {
+            $root = $user-><?= $this->moduleName; ?>s;
+        }
 
-		// Check current action
-		switch (Input::get('act'))
-		{
-			case 'paste':
-				// Allow
-				break;
+        $id = strlen(\Input::get('id')) ? \Input::get('id') : CURRENT_ID;
 
-			case 'create':
-				if (!strlen(Input::get('pid')) || !in_array(Input::get('pid'), $root))
-				{
-					\Controller::log('Not enough permissions to create <?= $this->dcaName ?> items in <?= $this->dcaName ?> archive ID "'.Input::get('pid').'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
-					\Controller::redirect('contao/main.php?act=error');
-				}
-				break;
+        // Check current action
+        switch (\Input::get('act'))
+        {
+            case 'paste':
+            // Allow
+            break;
 
-			case 'cut':
-			case 'copy':
-				if (!in_array(Input::get('pid'), $root))
-				{
-					\Controller::log('Not enough permissions to '.Input::get('act').' <?= $this->dcaName ?> item ID "'.$id.'" to <?= $this->dcaName ?> archive ID "'.Input::get('pid').'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
-					\Controller::redirect('contao/main.php?act=error');
-				}
-				// NO BREAK STATEMENT HERE
+            case 'create':
+            if (!strlen(\Input::get('pid')) || !in_array(\Input::get('pid'), $root))
+            {
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to create <?= $this->dcaName ?> items in <?= $this->dcaName ?> archive ID ' . \Input::get('pid') . '.');
+            }
+            break;
 
-			case 'edit':
-			case 'show':
-			case 'delete':
-			case 'toggle':
-			case 'feature':
-				$objArchive = $objDatabase->prepare("SELECT pid FROM tl_<?= $this->dcaName ?> WHERE id=?")
-					->limit(1)->execute($id);
+            case 'cut':
+            case 'copy':
+            if (!in_array(\Input::get('pid'), $root))
+            {
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Input::get('act') . ' <?= $this->dcaName ?> item ID ' . $id . ' to <?= $this->dcaName ?> archive ID ' . \Input::get('pid') . '.');
+            }
+            // NO BREAK STATEMENT HERE
 
-				if ($objArchive->numRows < 1)
-				{
-					\Controller::log('Invalid <?= $this->dcaName ?> item ID "'.$id.'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
-					\Controller::redirect('contao/main.php?act=error');
-				}
+            case 'edit':
+            case 'show':
+            case 'delete':
+            case 'toggle':
+            case 'feature':
+            $objArchive = $database->prepare("SELECT pid FROM tl_<?= $this->dcaName ?> WHERE id=?")
+            ->limit(1)
+            ->execute($id);
 
-				if (!in_array($objArchive->pid, $root))
-				{
-					\Controller::log('Not enough permissions to '.Input::get('act').' <?= $this->dcaName ?> item ID "'.$id.'" of <?= $this->dcaName ?> archive ID "'.$objArchive->pid.'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
-					\Controller::redirect('contao/main.php?act=error');
-				}
-			break;
+            if ($objArchive->numRows < 1)
+            {
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Invalid <?= $this->dcaName ?> item ID ' . $id . '.');
+            }
 
-			case 'select':
-			case 'editAll':
-			case 'deleteAll':
-			case 'overrideAll':
-			case 'cutAll':
-			case 'copyAll':
-				if (!in_array($id, $root))
-				{
-					\Controller::log('Not enough permissions to access <?= $this->dcaName ?> archive ID "'.$id.'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
-					\Controller::redirect('contao/main.php?act=error');
-				}
+            if (!in_array($objArchive->pid, $root))
+            {
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Input::get('act') . ' <?= $this->dcaName ?> item ID ' . $id . ' of <?= $this->dcaName ?> archive ID ' . $objArchive->pid . '.');
+            }
+            break;
 
-				$objArchive = $objDatabase->prepare("SELECT id FROM tl_<?= $this->dcaName ?> WHERE pid=?")->execute($id);
+            case 'select':
+            case 'editAll':
+            case 'deleteAll':
+            case 'overrideAll':
+            case 'cutAll':
+            case 'copyAll':
+            if (!in_array($id, $root))
+            {
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to access <?= $this->dcaName ?> archive ID ' . $id . '.');
+            }
 
-				if ($objArchive->numRows < 1)
-				{
-					\Controller::log('Invalid <?= $this->dcaName ?> archive ID "'.$id.'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
-					\Controller::redirect('contao/main.php?act=error');
-				}
+            $objArchive = $database->prepare("SELECT id FROM tl_<?= $this->dcaName ?> WHERE pid=?")
+            ->execute($id);
 
-				$session = $objSession->getData();
-				$session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $objArchive->fetchEach('id'));
-				$objSession->setData($session);
-				break;
+            if ($objArchive->numRows < 1)
+            {
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Invalid <?= $this->dcaName ?> archive ID ' . $id . '.');
+            }
 
-			default:
-				if (strlen(Input::get('act')))
-				{
-					\Controller::log('Invalid command "'.Input::get('act').'"', 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
-					\Controller::redirect('contao/main.php?act=error');
-				}
-				elseif (!in_array($id, $root))
-				{
-					\Controller::log('Not enough permissions to access <?= $this->dcaName ?> archive ID ' . $id, 'tl_<?= $this->dcaName ?> checkPermission', TL_ERROR);
-					\Controller::redirect('contao/main.php?act=error');
-				}
-				break;
-		}
-	}
+            /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
+            $session = \System::getContainer()->get('session');
+
+            $session = $session->all();
+            $session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $objArchive->fetchEach('id'));
+            $session->replace($session);
+            break;
+
+            default:
+            if (strlen(\Input::get('act')))
+            {
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Invalid command "' . \Input::get('act') . '".');
+            }
+            elseif (!in_array($id, $root))
+            {
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to access <?= $this->dcaName ?> archive ID ' . $id . '.');
+            }
+            break;
+        }
+    }
 <?php endif; if ($this->addPublish): ?>
 
-	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
-	{
-		$objUser = \BackendUser::getInstance();
+    public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+    {
+        $user = \BackendUser::getInstance();
 
-		if (strlen(Input::get('tid')))
-		{
-			$this->toggleVisibility(Input::get('tid'), (Input::get('state') == 1));
-			\Controller::redirect($this->getReferer());
-		}
+        if (strlen(\Input::get('tid')))
+        {
+            $this->toggleVisibility(\Input::get('tid'), (\Input::get('state') == 1), (@func_get_arg(12) ?: null));
+            $this->redirect($this->getReferer());
+        }
 
-		// Check permissions AFTER checking the tid, so hacking attempts are logged
-		if (!$objUser->isAdmin && !$objUser->hasAccess('tl_<?= $this->dcaName ?>::published', 'alexf'))
-		{
-			return '';
-		}
+        // Check permissions AFTER checking the tid, so hacking attempts are logged
+        if (!$user->hasAccess('tl_<?= $this->dcaName ?>::published', 'alexf'))
+        {
+            return '';
+        }
 
-		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? '' : 1);
+        $href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? '' : 1);
 
-		if (!$row['published'])
-		{
-			$icon = 'invisible.gif';
-		}
+        if (!$row['published'])
+        {
+            $icon = 'invisible.svg';
+        }
 
-		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ';
-	}
+        return '<a href="'.$this->addToUrl($href).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"').'</a> ';
+    }
 
-	public function toggleVisibility($intId, $blnVisible)
-	{
-		$objUser = \BackendUser::getInstance();
-		$objDatabase = \Database::getInstance();
+    public function toggleVisibility($intId, $blnVisible, \DataContainer $dc=null)
+    {
+        $user = \BackendUser::getInstance();
+        $database = \Database::getInstance();
 
-		// Check permissions to publish
-		if (!$objUser->isAdmin && !$objUser->hasAccess('tl_<?= $this->dcaName ?>::published', 'alexf'))
-		{
-			\Controller::log('Not enough permissions to publish/unpublish item ID "'.$intId.'"', 'tl_<?= $this->dcaName ?> toggleVisibility', TL_ERROR);
-			\Controller::redirect('contao/main.php?act=error');
-		}
+        // Set the ID and action
+        \Input::setGet('id', $intId);
+        \Input::setGet('act', 'toggle');
 
-		$objVersions = new Versions('tl_<?= $this->dcaName ?>', $intId);
-		$objVersions->initialize();
+        if ($dc)
+        {
+            $dc->id = $intId; // see #8043
+        }
 
-		// Trigger the save_callback
-		if (is_array($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['fields']['published']['save_callback']))
-		{
-			foreach ($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['fields']['published']['save_callback'] as $callback)
-			{
-				$this->import($callback[0]);
-				$blnVisible = $this->{$callback[0]}->{$callback[1]}($blnVisible, $this);
-			}
-		}
+        // Trigger the onload_callback
+        if (is_array($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['config']['onload_callback']))
+        {
+            foreach ($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['config']['onload_callback'] as $callback)
+            {
+                if (is_array($callback))
+                {
+                    $this->import($callback[0]);
+                    $this->{$callback[0]}->{$callback[1]}($dc);
+                }
+                elseif (is_callable($callback))
+                {
+                    $callback($dc);
+                }
+            }
+        }
 
-		// Update the database
-		$objDatabase->prepare("UPDATE tl_<?= $this->dcaName ?> SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
-			->execute($intId);
+        // Check the field access
+        if (!$user->hasAccess('tl_<?= $this->dcaName ?>::published', 'alexf'))
+        {
+            throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to publish/unpublish <?= $this->dcaName ?> item ID ' . $intId . '.');
+        }
 
-		$objVersions->create();
-		\Controller::log('A new version of record "tl_<?= $this->dcaName ?>.id='.$intId.'" has been created'.$this->getParentEntries('tl_<?= $this->dcaName ?>', $intId), 'tl_<?= $this->dcaName ?> toggleVisibility()', TL_GENERAL);
-	}
+        // Set the current record
+        if ($dc)
+        {
+            $objRow = $database->prepare("SELECT * FROM tl_<?= $this->dcaName ?> WHERE id=?")
+            ->limit(1)
+            ->execute($intId);
+
+            if ($objRow->numRows)
+            {
+                $dc->activeRecord = $objRow;
+            }
+        }
+
+        $objVersions = new \Versions('tl_<?= $this->dcaName ?>', $intId);
+        $objVersions->initialize();
+
+        // Trigger the save_callback
+        if (is_array($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['fields']['published']['save_callback']))
+        {
+            foreach ($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['fields']['published']['save_callback'] as $callback)
+            {
+                if (is_array($callback))
+                {
+                    $this->import($callback[0]);
+                    $blnVisible = $this->{$callback[0]}->{$callback[1]}($blnVisible, $dc);
+                }
+                elseif (is_callable($callback))
+                {
+                    $blnVisible = $callback($blnVisible, $dc);
+                }
+            }
+        }
+
+        $time = time();
+
+        // Update the database
+        $database->prepare("UPDATE tl_<?= $this->dcaName ?> SET tstamp=$time, published='" . ($blnVisible ? '1' : '') . "' WHERE id=?")
+        ->execute($intId);
+
+        if ($dc)
+        {
+            $dc->activeRecord->tstamp = $time;
+            $dc->activeRecord->published = ($blnVisible ? '1' : '');
+        }
+
+        // Trigger the onsubmit_callback
+        if (is_array($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['config']['onsubmit_callback']))
+        {
+            foreach ($GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>']['config']['onsubmit_callback'] as $callback)
+            {
+                if (is_array($callback))
+                {
+                    $this->import($callback[0]);
+                    $this->{$callback[0]}->{$callback[1]}($dc);
+                }
+                elseif (is_callable($callback))
+                {
+                    $callback($dc);
+                }
+            }
+        }
+
+        $objVersions->create();
+    }
 <?php endif; ?>
 
 }

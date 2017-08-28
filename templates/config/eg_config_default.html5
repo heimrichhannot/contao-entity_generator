@@ -4,23 +4,23 @@
 */
 <?php if ($this->moduleGroup == 'existing'): ?>
 <?php foreach ($this->dcas as $strDcaName => $arrData): ?>
-$GLOBALS['BE_MOD']['<?= $this->existingModuleGroupName ?>']['<?= $strDcaName ?>'] = array(
-	'tables' => array(<?php if ($arrData['addParentDca']): ?>'tl_<?= $arrData['parentDcaName'] ?>', <?php endif; ?>'tl_<?= $strDcaName ?>'),
-	'icon'   => 'system/modules/<?= $this->moduleName ?>/assets/img/icon_<?= $strDcaName ?>.png'
-);
+$GLOBALS['BE_MOD']['<?= $this->existingModuleGroupName ?>']['<?= $strDcaName ?>'] = [
+    'tables' => [<?php if ($arrData['addParentDca']): ?>'tl_<?= $arrData['parentDcaName'] ?>', <?php endif; ?>'tl_<?= $strDcaName ?>'],
+    'icon'   => 'system/modules/<?= $this->moduleName ?>/assets/img/icon_<?= $strDcaName ?>.png'
+];
 <?php endforeach; ?>
 <?php else: ?>
 array_insert(
-	$GLOBALS['BE_MOD'],
-	1,
-	array(
-		'<?= $this->moduleName ?>' => array(
-			'<?= $this->dcaName ?>' => array(
-				'tables' => array('tl_<?= $this->dcaName ?>'),
-				'icon'   => 'system/modules/<?= $this->moduleName ?>/assets/img/icon_<?= $this->dcaName ?>.png'
-			)
-		)
-	)
+    $GLOBALS['BE_MOD'],
+    1,
+    [
+        '<?= $this->moduleName ?>' => [
+            '<?= $this->dcaName ?>' => [
+                'tables' => ['tl_<?= $this->dcaName ?>'],
+                'icon'   => 'system/modules/<?= $this->moduleName ?>/assets/img/icon_<?= $this->dcaName ?>.png'
+            ]
+        ]
+    ]
 );
 <?php endif; ?>
 <?php endif; if (!empty($this->modelClasses)): ?>
@@ -34,7 +34,7 @@ $GLOBALS['TL_MODELS']['tl_<?= $strDcaName ?>'] = '\<?= $this->moduleNamespace ?>
 <?php endif; if ($this->addUserPermissions): ?>
 
 /**
-* Add permissions
+* Permissions
 */
 $GLOBALS['TL_PERMISSIONS'][] = '<?= $this->moduleName; ?>s';
 $GLOBALS['TL_PERMISSIONS'][] = '<?= $this->moduleName; ?>p';

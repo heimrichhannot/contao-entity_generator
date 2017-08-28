@@ -8,23 +8,21 @@ $GLOBALS['TL_DCA']['tl_user']['palettes']['custom'] = str_replace('fop;', 'fop;{
 /**
  * Add fields to tl_user_group
  */
-$GLOBALS['TL_DCA']['tl_user']['fields']['<?= $this->moduleName ?>s'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_user']['<?= $this->moduleName ?>s'],
-	'exclude'                 => true,
-	'inputType'               => 'checkbox',
-	'foreignKey'              => 'tl_<?= $this->dcaName ?>.<?= $this->addTitle ? 'title' : 'id' ?>',
-	'eval'                    => array('multiple' => true),
-	'sql'                     => "blob NULL"
-);
+$GLOBALS['TL_DCA']['tl_user']['fields']['<?= $this->moduleName ?>s'] = [
+    'label'                   => &$GLOBALS['TL_LANG']['tl_user']['<?= $this->moduleName ?>s'],
+    'exclude'                 => true,
+    'inputType'               => 'checkbox',
+    'foreignKey'              => 'tl_<?= $this->dcaName ?>.<?= $this->addTitle ? 'title' : 'id' ?>',
+    'eval'                    => ['multiple' => true],
+    'sql'                     => "blob NULL"
+];
 
-$GLOBALS['TL_DCA']['tl_user']['fields']['<?= $this->moduleName ?>p'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_user']['<?= $this->moduleName ?>p'],
-	'exclude'                 => true,
-	'inputType'               => 'checkbox',
-	'options'                 => array('create', 'delete'),
-	'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-	'eval'                    => array('multiple' => true),
-	'sql'                     => "blob NULL"
-);
+$GLOBALS['TL_DCA']['tl_user']['fields']['<?= $this->moduleName ?>p'] = [
+    'label'                   => &$GLOBALS['TL_LANG']['tl_user']['<?= $this->moduleName ?>p'],
+    'exclude'                 => true,
+    'inputType'               => 'checkbox',
+    'options'                 => ['create', 'delete'],
+    'reference'               => &$GLOBALS['TL_LANG']['MSC'],
+    'eval'                    => ['multiple' => true],
+    'sql'                     => "blob NULL"
+];

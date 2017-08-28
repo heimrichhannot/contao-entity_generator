@@ -2,7 +2,5 @@ namespace <?= $this->moduleNamespace ?>;
 
 class <?= $this->entityClassName ?>Model extends \Model
 {
-
-	protected static $strTable = 'tl_<?= $this->dcaName; ?>';
-
+    protected static $strTable = 'tl_<?= $this->dcaName; ?>';
 }

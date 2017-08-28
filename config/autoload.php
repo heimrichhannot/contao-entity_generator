@@ -12,30 +12,30 @@
 /**
  * Register the namespaces
  */
-ClassLoader::addNamespaces(array
-(
+ClassLoader::addNamespaces(
+    [
 	'HeimrichHannot',
-));
+    ]);
 
 
 /**
  * Register the classes
  */
-ClassLoader::addClasses(array
-(
+ClassLoader::addClasses(
+    [
 	// Models
 	'HeimrichHannot\EntityGenerator\EntityTemplateModel'   => 'system/modules/entity_generator/models/EntityTemplateModel.php',
 
 	// Modules
 	'HeimrichHannot\EntityGenerator\ModuleEntityGenerator' => 'system/modules/entity_generator/modules/ModuleEntityGenerator.php',
-));
+    ]);
 
 
 /**
  * Register the templates
  */
-TemplateLoader::addFiles(array
-(
+TemplateLoader::addFiles(
+    [
 	'htaccess'                          => 'system/modules/entity_generator/templates/assets',
 	'eg_model_default'                  => 'system/modules/entity_generator/templates/models',
 	'eg_config_default'                 => 'system/modules/entity_generator/templates/config',
@@ -51,4 +51,4 @@ TemplateLoader::addFiles(array
 	'eg_user_dca_default'               => 'system/modules/entity_generator/templates/dca',
 	'eg_user_group_dca_default'         => 'system/modules/entity_generator/templates/dca',
 	'eg_dca_archive_default'            => 'system/modules/entity_generator/templates/dca',
-));
+    ]);

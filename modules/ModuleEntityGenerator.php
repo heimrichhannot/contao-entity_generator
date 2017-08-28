@@ -318,7 +318,7 @@ class ModuleEntityGenerator
         foreach (static::$arrMultiColumnWizardFields as $strField)
         {
             $objEntityTemplate->{$strField} = deserialize($objEntityTemplate->{$strField}, true);
-            $objEntityTemplate->{$strField} = static::transformSingleDimensionalMcwArrays($strField, $objEntityTemplate->{$strField});
+            $objEntityTemplate->{$strField} = static::transformSingleDimensionalMceArrays($strField, $objEntityTemplate->{$strField});
         }
 
         // publish
@@ -328,9 +328,9 @@ class ModuleEntityGenerator
         }
     }
 
-    protected static function transformSingleDimensionalMcwArrays($strField, $arrData)
+    protected static function transformSingleDimensionalMceArrays($strField, $arrData)
     {
-        $arrColumnFields = $GLOBALS['TL_DCA']['tl_entity_template']['fields'][$strField]['eval']['columnFields'];
+        $arrColumnFields = $GLOBALS['TL_DCA']['tl_entity_template']['fields'][$strField]['eval']['multiColumnEditor']['fields'];
 
         if (count($arrColumnFields) > 1)
         {
@@ -362,7 +362,13 @@ class ModuleEntityGenerator
 
         $objTemplate->setData($arrData + $objEntityTemplate->row());
 
+        // avoid comments like "<!-- TEMPLATE START"
+        $blnDebugModeTmp = \Config::get('debugMode');
+        \Config::set('debugMode', false);
+
         $strResult = $objTemplate->parse();
+
+        \Config::set('debugMode', $blnDebugModeTmp);
 
         if ($strResult)
         {

@@ -3,8 +3,8 @@ $arrLang = &$GLOBALS['TL_LANG']['tl_user'];
 /**
  * Fields
  */
-$arrLang['<?= $this->moduleName ?>s'] = array('Allowed archives', 'Here you can grant access to one or more archives.');
-$arrLang['<?= $this->moduleName ?>p'] = array('Archive permissions', 'Here you can define the archive permissions.');
+$arrLang['<?= $this->moduleName ?>s'] = ['Allowed archives', 'Here you can grant access to one or more archives.'];
+$arrLang['<?= $this->moduleName ?>p'] = ['Archive permissions', 'Here you can define the archive permissions.'];
 
 
 /**
