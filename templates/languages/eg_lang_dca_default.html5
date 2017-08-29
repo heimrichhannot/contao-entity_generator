@@ -1,34 +1,32 @@
-$arrLang = &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>'];
+$lang = &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>'];
 
 /**
  * Fields
  */
 <?php if ($this->addTitle): ?>
-$arrLang['title'] = ['Title', 'Please enter a title.'];
+$lang['title'] = ['Title', 'Please enter a title.'];
 <?php endif; if ($this->addPublish): ?>
-$arrLang['published'] = ['Publish <?= $this->localizedEntityName; ?>', 'Make the <?= $this->localizedEntityName; ?> publicly visible on the website.'];
-$arrLang['start'] = ['Show from', 'Do not publish the <?= $this->localizedEntityName; ?> on the website before this date.'];
-$arrLang['stop'] = ['Show until', 'Unpublish the <?= $this->localizedEntityName; ?> on the website after this date.'];
+$lang['published'] = ['Publish <?= $this->localizedEntityName; ?>', 'Make the <?= $this->localizedEntityName; ?> publicly visible on the website.'];
+$lang['start'] = ['Show from', 'Do not publish the <?= $this->localizedEntityName; ?> on the website before this date.'];
+$lang['stop'] = ['Show until', 'Unpublish the <?= $this->localizedEntityName; ?> on the website after this date.'];
 <?php endif; ?>
-$arrLang['tstamp'] = ['Revision date', ''];
-
+$lang['tstamp'] = ['Revision date', ''];
 
 /**
  * Legends
  */
 <?php if ($this->addTitle): ?>
-$arrLang['general_legend'] = 'General settings';
+$lang['general_legend'] = 'General settings';
 <?php endif; if ($this->addPublish): ?>
-$arrLang['publish_legend'] = 'Publish settings';
+$lang['publish_legend'] = 'Publish settings';
 <?php endif; ?>
-
 
 /**
  * Buttons
  */
-$arrLang['new'] = ['<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][0], $this->localizedEntityName) ?>', '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][1], $this->localizedEntityName, '%s') ?>'];
+$lang['new'] = ['<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][0], $this->localizedEntityName) ?>', '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][1], $this->localizedEntityName, '%s') ?>'];
 <?php if ($this->addOperations): ?>
 <?php foreach ($this->operations as $strAct): ?>
-$arrLang['<?= $strAct ?>'] = ['<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][0], $this->localizedEntityName) ?>', '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][1], $this->localizedEntityName, '%s') ?>'];
+$lang['<?= $strAct ?>'] = ['<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][0], $this->localizedEntityName) ?>', '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][1], $this->localizedEntityName, '%s') ?>'];
 <?php endforeach; ?>
 <?php endif; ?>

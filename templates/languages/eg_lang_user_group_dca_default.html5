@@ -1,6 +1,6 @@
-$arrLang = &$GLOBALS['TL_LANG']['tl_user_group'];
+$lang = &$GLOBALS['TL_LANG']['tl_user_group'];
 
 /**
  * Legends
  */
-$arrLang['<?= $this->moduleName ?>_legend'] = '<?= $this->localizedModuleName ?> permissions';
+$lang['<?= $this->moduleName ?>_legend'] = '<?= $this->localizedModuleName ?> permissions';

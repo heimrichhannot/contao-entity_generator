@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.3] - 2017-08-29
+
+### Removed
+- fixed type prefixing and blank lines in localization
+
 ## [3.0.2] - 2017-08-29
 
 ### Removed
