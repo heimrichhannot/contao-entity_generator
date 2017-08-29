@@ -177,14 +177,7 @@ class tl_<?= $this->dcaName; ?> extends \Backend
     {
         $user     = \BackendUser::getInstance();
         $database = \Database::getInstance();
-        $bundles  = \System::getContainer()->getParameter('kernel.bundles');
-        
-        // HOOK: comments extension required
-        if (!isset($bundles['ContaoCommentsBundle']))
-        {
-            unset($GLOBALS['TL_DCA']['tl_<?= $this->dcaName; ?>']['fields']['allowComments']);
-        }
-        
+
         if ($user->isAdmin)
         {
             return;
