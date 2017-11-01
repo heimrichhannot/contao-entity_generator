@@ -171,12 +171,12 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName; ?>'] = [
     ]
 ];
 
-class tl_<?= $this->dcaName; ?> extends \Backend
+class tl_<?= $this->dcaName; ?> extends \Contao\Backend
 {
     public function checkPermission()
     {
-        $user     = \BackendUser::getInstance();
-        $database = \Database::getInstance();
+        $user     = \Contao\BackendUser::getInstance();
+        $database = \Contao\Database::getInstance();
 
         if ($user->isAdmin)
         {
@@ -202,10 +202,10 @@ class tl_<?= $this->dcaName; ?> extends \Backend
         }
         
         /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $objSession */
-        $objSession = \System::getContainer()->get('session');
+        $objSession = \Contao\System::getContainer()->get('session');
         
         // Check current action
-        switch (\Input::get('act'))
+        switch (\Contao\Input::get('act'))
         {
             case 'create':
             case 'select':
@@ -214,14 +214,14 @@ class tl_<?= $this->dcaName; ?> extends \Backend
         
             case 'edit':
                 // Dynamically add the record to the user profile
-                if (!in_array(\Input::get('id'), $root))
+                if (!in_array(\Contao\Input::get('id'), $root))
                 {
                     /** @var \Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface $sessionBag */
                     $sessionBag = $objSession->getBag('contao_backend');
             
                     $arrNew = $sessionBag->get('new_records');
             
-                    if (is_array($arrNew['tl_<?= $this->dcaName; ?>']) && in_array(\Input::get('id'), $arrNew['tl_<?= $this->dcaName; ?>']))
+                    if (is_array($arrNew['tl_<?= $this->dcaName; ?>']) && in_array(\Contao\Input::get('id'), $arrNew['tl_<?= $this->dcaName; ?>']))
                     {
                         // Add the permissions on group level
                         if ($user->inherit != 'custom')
@@ -235,7 +235,7 @@ class tl_<?= $this->dcaName; ?> extends \Backend
                                 if (is_array($arrModulep) && in_array('create', $arrModulep))
                                 {
                                     $arrModules = \StringUtil::deserialize($objGroup-><?= $this->moduleName; ?>s, true);
-                                    $arrModules[] = \Input::get('id');
+                                    $arrModules[] = \Contao\Input::get('id');
                 
                                     $database->prepare("UPDATE tl_user_group SET <?= $this->moduleName; ?>s=? WHERE id=?")->execute(serialize($arrModules), $objGroup->id);
                                 }
@@ -254,7 +254,7 @@ class tl_<?= $this->dcaName; ?> extends \Backend
                             if (is_array($arrModulep) && in_array('create', $arrModulep))
                             {
                                 $arrModules = \StringUtil::deserialize($user-><?= $this->moduleName; ?>s, true);
-                                $arrModules[] = \Input::get('id');
+                                $arrModules[] = \Contao\Input::get('id');
                 
                                 $database->prepare("UPDATE tl_user SET <?= $this->moduleName; ?>s=? WHERE id=?")
                                 ->execute(serialize($arrModules), $user->id);
@@ -262,7 +262,7 @@ class tl_<?= $this->dcaName; ?> extends \Backend
                         }
                 
                         // Add the new element to the user object
-                        $root[] = \Input::get('id');
+                        $root[] = \Contao\Input::get('id');
                         $user-><?= $this->moduleName; ?>s = $root;
                     }
                 }
@@ -271,9 +271,9 @@ class tl_<?= $this->dcaName; ?> extends \Backend
             case 'copy':
             case 'delete':
             case 'show':
-                if (!in_array(\Input::get('id'), $root) || (\Input::get('act') == 'delete' && !$user->hasAccess('delete', '<?= $this->moduleName; ?>p')))
+                if (!in_array(\Contao\Input::get('id'), $root) || (\Contao\Input::get('act') == 'delete' && !$user->hasAccess('delete', '<?= $this->moduleName; ?>p')))
                 {
-                    throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Input::get('act') . ' <?= $this->dcaName ?> ID ' . \Input::get('id') . '.');
+                    throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Contao\Input::get('act') . ' <?= $this->dcaName ?> ID ' . \Contao\Input::get('id') . '.');
                 }
                 break;
     
@@ -281,7 +281,7 @@ class tl_<?= $this->dcaName; ?> extends \Backend
             case 'deleteAll':
             case 'overrideAll':
                 $session = $objSession->all();
-                if (\Input::get('act') == 'deleteAll' && !$user->hasAccess('delete', '<?= $this->moduleName; ?>p'))
+                if (\Contao\Input::get('act') == 'deleteAll' && !$user->hasAccess('delete', '<?= $this->moduleName; ?>p'))
                 {
                     $session['CURRENT']['IDS'] = [];
                 }
@@ -293,9 +293,9 @@ class tl_<?= $this->dcaName; ?> extends \Backend
                 break;
             
             default:
-                if (strlen(\Input::get('act')))
+                if (strlen(\Contao\Input::get('act')))
                 {
-                    throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Input::get('act') . ' <?= $this->dcaName ?>s.');
+                    throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Contao\Input::get('act') . ' <?= $this->dcaName ?>s.');
                 }
                 break;
         }
@@ -303,16 +303,16 @@ class tl_<?= $this->dcaName; ?> extends \Backend
 
     public function editHeader($row, $href, $label, $title, $icon, $attributes)
     {
-        return \BackendUser::getInstance()->canEditFieldsOf('tl_<?= $this->dcaName; ?>') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
+        return \Contao\BackendUser::getInstance()->canEditFieldsOf('tl_<?= $this->dcaName; ?>') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
     }
 
     public function copyArchive($row, $href, $label, $title, $icon, $attributes)
     {
-        return \BackendUser::getInstance()->hasAccess('create', '<?= $this->moduleName; ?>p') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
+        return \Contao\BackendUser::getInstance()->hasAccess('create', '<?= $this->moduleName; ?>p') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
     }
 
     public function deleteArchive($row, $href, $label, $title, $icon, $attributes)
     {
-        return \BackendUser::getInstance()->hasAccess('delete', '<?= $this->moduleName; ?>p') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
+        return \Contao\BackendUser::getInstance()->hasAccess('delete', '<?= $this->moduleName; ?>p') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
     }
 }

@@ -1,27 +1,28 @@
-/**
- * Extend default palette
- */
-$GLOBALS['TL_DCA']['tl_user_group']['palettes']['default'] = str_replace('fop;', 'fop;{<?= $this->moduleName ?>_legend},<?= $this->moduleName ?>s,<?= $this->moduleName ?>p;', $GLOBALS['TL_DCA']['tl_user_group']['palettes']['default']);
-
+$dca = &$GLOBALS['TL_DCA']['tl_user_group'];
 
 /**
- * Add fields to tl_user_group
+ * Palettes
  */
-$GLOBALS['TL_DCA']['tl_user_group']['fields']['<?= $this->moduleName ?>s'] = [
-    'label'                   => &$GLOBALS['TL_LANG']['tl_user']['<?= $this->moduleName ?>s'],
-    'exclude'                 => true,
-    'inputType'               => 'checkbox',
-    'foreignKey'              => 'tl_<?= $this->dcaName ?>.<?= $this->addTitle ? 'title' : 'id' ?>',
-    'eval'                    => ['multiple' => true],
-    'sql'                     => "blob NULL"
+$dca['palettes']['default'] = str_replace('fop;', 'fop;{<?= $this->moduleName ?>_legend},<?= $this->moduleName ?>s,<?= $this->moduleName ?>p;', $dca['palettes']['default']);
+
+/**
+ * Fields
+ */
+$dca['fields']['<?= $this->moduleName ?>s'] = [
+    'label'      => &$GLOBALS['TL_LANG']['tl_user']['<?= $this->moduleName ?>s'],
+    'exclude'    => true,
+    'inputType'  => 'checkbox',
+    'foreignKey' => 'tl_<?= $this->dcaName ?>.<?= $this->addTitle ? 'title' : 'id' ?>',
+    'eval'       => ['multiple' => true],
+    'sql'        => "blob NULL"
 ];
 
-$GLOBALS['TL_DCA']['tl_user_group']['fields']['<?= $this->moduleName ?>p'] = [
-    'label'                   => &$GLOBALS['TL_LANG']['tl_user']['<?= $this->moduleName ?>p'],
-    'exclude'                 => true,
-    'inputType'               => 'checkbox',
-    'options'                 => ['create', 'delete'],
-    'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-    'eval'                    => ['multiple' => true],
-    'sql'                     => "blob NULL"
+$dca['fields']['<?= $this->moduleName ?>p'] = [
+    'label'     => &$GLOBALS['TL_LANG']['tl_user']['<?= $this->moduleName ?>p'],
+    'exclude'   => true,
+    'inputType' => 'checkbox',
+    'options'   => ['create', 'delete'],
+    'reference' => &$GLOBALS['TL_LANG']['MSC'],
+    'eval'      => ['multiple' => true],
+    'sql'       => "blob NULL"
 ];

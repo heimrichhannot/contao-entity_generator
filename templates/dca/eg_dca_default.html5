@@ -170,20 +170,20 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = [
 ];
 
 
-class tl_<?= $this->dcaName ?> extends \Backend
+class tl_<?= $this->dcaName ?> extends \Contao\Backend
 {
 <?php if ($this->addParentDca): ?>
 
     public function listChildren($arrRow)
     {
         return '<div class="tl_content_left">' . ($arrRow['title'] ?: $arrRow['id']) . ' <span style="color:#b3b3b3; padding-left:3px">[' .
-                \Date::parse(Config::get('datimFormat'), trim($arrRow['dateAdded'])) . ']</span></div>';
+                \Date::parse(\Contao\Config::get('datimFormat'), trim($arrRow['dateAdded'])) . ']</span></div>';
     }
 
     public function checkPermission()
     {
-        $user = \BackendUser::getInstance();
-        $database = \Database::getInstance();
+        $user = \Contao\BackendUser::getInstance();
+        $database = \Contao\Database::getInstance();
 
         if ($user->isAdmin)
         {
@@ -200,27 +200,27 @@ class tl_<?= $this->dcaName ?> extends \Backend
             $root = $user-><?= $this->moduleName; ?>s;
         }
 
-        $id = strlen(\Input::get('id')) ? \Input::get('id') : CURRENT_ID;
+        $id = strlen(\Contao\Input::get('id')) ? \Contao\Input::get('id') : CURRENT_ID;
 
         // Check current action
-        switch (\Input::get('act'))
+        switch (\Contao\Input::get('act'))
         {
             case 'paste':
             // Allow
             break;
 
             case 'create':
-            if (!strlen(\Input::get('pid')) || !in_array(\Input::get('pid'), $root))
+            if (!strlen(\Contao\Input::get('pid')) || !in_array(\Contao\Input::get('pid'), $root))
             {
-                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to create <?= $this->dcaName ?> items in <?= $this->dcaName ?> archive ID ' . \Input::get('pid') . '.');
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to create <?= $this->dcaName ?> items in <?= $this->dcaName ?> archive ID ' . \Contao\Input::get('pid') . '.');
             }
             break;
 
             case 'cut':
             case 'copy':
-            if (!in_array(\Input::get('pid'), $root))
+            if (!in_array(\Contao\Input::get('pid'), $root))
             {
-                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Input::get('act') . ' <?= $this->dcaName ?> item ID ' . $id . ' to <?= $this->dcaName ?> archive ID ' . \Input::get('pid') . '.');
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Contao\Input::get('act') . ' <?= $this->dcaName ?> item ID ' . $id . ' to <?= $this->dcaName ?> archive ID ' . \Contao\Input::get('pid') . '.');
             }
             // NO BREAK STATEMENT HERE
 
@@ -240,7 +240,7 @@ class tl_<?= $this->dcaName ?> extends \Backend
 
             if (!in_array($objArchive->pid, $root))
             {
-                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Input::get('act') . ' <?= $this->dcaName ?> item ID ' . $id . ' of <?= $this->dcaName ?> archive ID ' . $objArchive->pid . '.');
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Not enough permissions to ' . \Contao\Input::get('act') . ' <?= $this->dcaName ?> item ID ' . $id . ' of <?= $this->dcaName ?> archive ID ' . $objArchive->pid . '.');
             }
             break;
 
@@ -272,9 +272,9 @@ class tl_<?= $this->dcaName ?> extends \Backend
             break;
 
             default:
-            if (strlen(\Input::get('act')))
+            if (strlen(\Contao\Input::get('act')))
             {
-                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Invalid command "' . \Input::get('act') . '".');
+                throw new \Contao\CoreBundle\Exception\AccessDeniedException('Invalid command "' . \Contao\Input::get('act') . '".');
             }
             elseif (!in_array($id, $root))
             {
@@ -287,11 +287,11 @@ class tl_<?= $this->dcaName ?> extends \Backend
 
     public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
     {
-        $user = \BackendUser::getInstance();
+        $user = \Contao\BackendUser::getInstance();
 
-        if (strlen(\Input::get('tid')))
+        if (strlen(\Contao\Input::get('tid')))
         {
-            $this->toggleVisibility(\Input::get('tid'), (\Input::get('state') == 1), (@func_get_arg(12) ?: null));
+            $this->toggleVisibility(\Contao\Input::get('tid'), (\Contao\Input::get('state') == 1), (@func_get_arg(12) ?: null));
             $this->redirect($this->getReferer());
         }
 
@@ -313,12 +313,12 @@ class tl_<?= $this->dcaName ?> extends \Backend
 
     public function toggleVisibility($intId, $blnVisible, \DataContainer $dc=null)
     {
-        $user = \BackendUser::getInstance();
-        $database = \Database::getInstance();
+        $user = \Contao\BackendUser::getInstance();
+        $database = \Contao\Database::getInstance();
 
         // Set the ID and action
-        \Input::setGet('id', $intId);
-        \Input::setGet('act', 'toggle');
+        \Contao\Input::setGet('id', $intId);
+        \Contao\Input::setGet('act', 'toggle');
 
         if ($dc)
         {
