@@ -291,7 +291,7 @@ class tl_<?= $this->dcaName ?> extends \Contao\Backend
 
         if (strlen(\Contao\Input::get('tid')))
         {
-            $this->toggleVisibility(\Contao\Input::get('tid'), (\Contao\Input::get('state') == 1), (@func_get_arg(12) ?: null));
+            $this->toggleVisibility(\Contao\Input::get('tid'), (\Contao\Input::get('state') === '1'), (@func_get_arg(12) ?: null));
             $this->redirect($this->getReferer());
         }
 

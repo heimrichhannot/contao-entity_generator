@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.5] - 2018-02-15
+
+### Fixed
+- toggleVisibility for cs fixer support in created modules
+
 ## [3.0.4] - 2017-11-01
 
 ### Fixed
