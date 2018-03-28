@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.0.0] - 2018-03-28
+
+### Removed
+- haste_plus in favor of utils-bundle in the generated files
+
+### Added
+- oncopy callback for dca files (dateAdded)
+
+### Fixed
+- $this calls in backend classes
+
 ## [3.0.5] - 2018-02-15
 
 ### Fixed

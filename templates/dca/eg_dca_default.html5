@@ -22,12 +22,15 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = [
         ],
 <?php endif; ?>
         'onsubmit_callback' => [
-            ['HeimrichHannot\Haste\Dca\General', 'setDateAdded'],
+            ['huh.utils.dca', 'setDateAdded'],
 <?php if ($this->addOnSubmitCallbacks): ?>
 <?php foreach ($this->onSubmitCallbacks as $intId => $arrCallback): ?>            ['<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>']<?php if ($intId != count($this->onSubmitCallbacks) - 1): ?>,
 <?php endif; ?><?php endforeach; ?>
 
 <?php endif; ?>
+        ],
+        'oncopy_callback'   => [
+            ['huh.utils.dca', 'setDateAddedOnCopy'],
         ],
         'sql' => [
             'keys' => [
@@ -308,7 +311,7 @@ class tl_<?= $this->dcaName ?> extends \Contao\Backend
             $icon = 'invisible.svg';
         }
 
-        return '<a href="'.$this->addToUrl($href).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"').'</a> ';
+        return '<a href="'.\Controller::addToUrl($href).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"').'</a> ';
     }
 
     public function toggleVisibility($intId, $blnVisible, \DataContainer $dc=null)

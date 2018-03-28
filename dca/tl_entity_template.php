@@ -148,7 +148,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = [
             'label'     => &$GLOBALS['TL_LANG']['tl_entity_template']['outputDir'],
             'exclude'   => true,
             'inputType' => 'fileTree',
-            'eval'      => ['fieldType' => 'radio', 'mandatory' => true, 'tl_class' => 'w50 clr'],
+            'eval'      => ['fieldType' => 'radio', 'mandatory' => true, 'tl_class' => 'w50 clr autoheight'],
             'sql'       => "binary(16) NULL"
         ],
         'moduleName'                => [
@@ -172,7 +172,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = [
             'default'   => ['css', 'img', 'js', 'htaccess'],
             'options'   => ['css', 'img', 'js', 'htaccess'],
             'reference' => &$GLOBALS['TL_LANG']['tl_entity_template']['addAssets'],
-            'eval'      => ['multiple' => true, 'tl_class' => 'w50 clr'],
+            'eval'      => ['multiple' => true, 'tl_class' => 'w50 clr autoheight'],
             'sql'       => "blob NULL"
         ],
         'addConfig'                 => [
@@ -383,7 +383,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = [
             'inputType' => 'multiColumnEditor',
             'eval'      => [
                 'mandatory'         => true,
-                'tl_class'          => 'w50 clr',
+                'tl_class'          => 'w50 clr autoheight',
                 'multiColumnEditor' => [
                     'fields' => [
                         'class'  => [
@@ -416,7 +416,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = [
             'inputType' => 'multiColumnEditor',
             'eval'      => [
                 'mandatory'         => true,
-                'tl_class'          => 'w50 clr',
+                'tl_class'          => 'w50 clr autoheight',
                 'multiColumnEditor' => [
                     'fields' => [
                         'class'  => [
@@ -458,7 +458,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = [
             'inputType' => 'multiColumnEditor',
             'eval'      => [
                 'mandatory'         => true,
-                'tl_class'          => 'w50 clr',
+                'tl_class'          => 'w50 clr autoheight',
                 'multiColumnEditor' => [
                     'fields' => [
                         'field'   => [
@@ -492,7 +492,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = [
             'inputType' => 'multiColumnEditor',
             'eval'      => [
                 'mandatory'         => true,
-                'tl_class'          => 'w50 clr',
+                'tl_class'          => 'w50 clr autoheight',
                 'multiColumnEditor' => [
                     'fields' => [
                         'field' => [
@@ -522,7 +522,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = [
             ],
             'eval'      => [
                 'mandatory'         => true,
-                'tl_class'          => 'w50 clr',
+                'tl_class'          => 'w50 clr autoheight',
                 'multiColumnEditor' => [
                     'sortable' => true,
                     'fields' => [
@@ -556,7 +556,7 @@ $GLOBALS['TL_DCA']['tl_entity_template'] = [
                 ['act' => 'show'],
             ],
             'eval'      => [
-                'tl_class'          => 'w50 clr',
+                'tl_class'          => 'w50 clr autoheight',
                 'multiColumnEditor' => [
                     'sortable' => true,
                     'fields' => [
