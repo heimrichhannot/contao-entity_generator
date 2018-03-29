@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.0.1] - 2018-03-29
+
+### Fixed
+- addToUrl()
+
 ## [4.0.0] - 2018-03-28
 
 ### Removed
