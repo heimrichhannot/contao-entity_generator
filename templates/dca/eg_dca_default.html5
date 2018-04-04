@@ -295,7 +295,7 @@ class tl_<?= $this->dcaName ?> extends \Contao\Backend
         if (strlen(\Contao\Input::get('tid')))
         {
             $this->toggleVisibility(\Contao\Input::get('tid'), (\Contao\Input::get('state') === '1'), (@func_get_arg(12) ?: null));
-            $this->redirect($this->getReferer());
+            Controller::redirect(System::getReferer());
         }
 
         // Check permissions AFTER checking the tid, so hacking attempts are logged
@@ -311,7 +311,7 @@ class tl_<?= $this->dcaName ?> extends \Contao\Backend
             $icon = 'invisible.svg';
         }
 
-        return '<a href="'.$this->addToUrl($href).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"').'</a> ';
+        return '<a href="'.Controller::addToUrl($href).'&rt='.\RequestToken::get().'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"').'</a> ';
     }
 
     public function toggleVisibility($intId, $blnVisible, \DataContainer $dc=null)
@@ -335,8 +335,7 @@ class tl_<?= $this->dcaName ?> extends \Contao\Backend
             {
                 if (is_array($callback))
                 {
-                    $this->import($callback[0]);
-                    $this->{$callback[0]}->{$callback[1]}($dc);
+                    System::importStatic($callback[0])->{$callback[1]}($dc);
                 }
                 elseif (is_callable($callback))
                 {
@@ -374,8 +373,7 @@ class tl_<?= $this->dcaName ?> extends \Contao\Backend
             {
                 if (is_array($callback))
                 {
-                    $this->import($callback[0]);
-                    $blnVisible = $this->{$callback[0]}->{$callback[1]}($blnVisible, $dc);
+                    $blnVisible = System::importStatic($callback[0])->{$callback[1]}($blnVisible, $dc);
                 }
                 elseif (is_callable($callback))
                 {
@@ -387,7 +385,7 @@ class tl_<?= $this->dcaName ?> extends \Contao\Backend
         $time = time();
 
         // Update the database
-        $database->prepare("UPDATE tl_<?= $this->dcaName ?> SET tstamp=$time, published='" . ($blnVisible ? '1' : '') . "' WHERE id=?")
+        $database->prepare("UPDATE tl_<?= $this->dcaName ?> SET tstamp=$time, published='" . ($blnVisible ? '1' : "''") . "' WHERE id=?")
         ->execute($intId);
 
         if ($dc)
@@ -403,8 +401,7 @@ class tl_<?= $this->dcaName ?> extends \Contao\Backend
             {
                 if (is_array($callback))
                 {
-                    $this->import($callback[0]);
-                    $this->{$callback[0]}->{$callback[1]}($dc);
+                    System::importStatic($callback[0])->{$callback[1]}($dc);
                 }
                 elseif (is_callable($callback))
                 {

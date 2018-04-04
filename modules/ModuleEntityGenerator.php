@@ -306,6 +306,8 @@ class ModuleEntityGenerator
 
     protected static function prepareData($objEntityTemplate)
     {
+        $objEntityTemplate->moduleName = str_replace('-', '_', $objEntityTemplate->moduleName);
+
         if ($objEntityTemplate->addParentDca)
         {
             if (($objParent = EntityTemplateModel::findByPk($objEntityTemplate->parentDca)) !== null)

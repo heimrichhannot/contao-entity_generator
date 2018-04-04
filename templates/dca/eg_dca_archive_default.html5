@@ -306,16 +306,16 @@ class tl_<?= $this->dcaName; ?> extends \Contao\Backend
 
     public function editHeader($row, $href, $label, $title, $icon, $attributes)
     {
-        return \Contao\BackendUser::getInstance()->canEditFieldsOf('tl_<?= $this->dcaName; ?>') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
+        return \Contao\BackendUser::getInstance()->canEditFieldsOf('tl_<?= $this->dcaName; ?>') ? '<a href="'.Controller::addToUrl($href.'&amp;id='.$row['id']) . '&rt=' . \RequestToken::get() . '" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
     }
 
     public function copyArchive($row, $href, $label, $title, $icon, $attributes)
     {
-        return \Contao\BackendUser::getInstance()->hasAccess('create', '<?= $this->moduleName; ?>p') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
+        return \Contao\BackendUser::getInstance()->hasAccess('create', '<?= $this->moduleName; ?>p') ? '<a href="'.Controller::addToUrl($href.'&amp;id='.$row['id']). '&rt=' . \RequestToken::get() . '" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
     }
 
     public function deleteArchive($row, $href, $label, $title, $icon, $attributes)
     {
-        return \Contao\BackendUser::getInstance()->hasAccess('delete', '<?= $this->moduleName; ?>p') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
+        return \Contao\BackendUser::getInstance()->hasAccess('delete', '<?= $this->moduleName; ?>p') ? '<a href="'.Controller::addToUrl($href.'&amp;id='.$row['id']). '&rt=' . \RequestToken::get() . '" title="'.\StringUtil::specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.svg$/i', '_.svg', $icon)).' ';
     }
 }
