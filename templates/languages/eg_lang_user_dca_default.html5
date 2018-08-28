@@ -3,8 +3,10 @@ $lang = &$GLOBALS['TL_LANG']['tl_user'];
 /**
  * Fields
  */
-$lang['<?= $this->moduleName ?>s'] = ['Allowed archives', 'Here you can grant access to one or more archives.'];
-$lang['<?= $this->moduleName ?>p'] = ['Archive permissions', 'Here you can define the archive permissions.'];
+$lang['<?= $this->moduleName ?>s'][0] = 'Allowed archives';
+$lang['<?= $this->moduleName ?>s'][1] = 'Here you can grant access to one or more archives.';
+$lang['<?= $this->moduleName ?>p'][0] = 'Archive permissions';
+$lang['<?= $this->moduleName ?>p'][1] = 'Here you can define the archive permissions.';
 
 /**
  * Legends

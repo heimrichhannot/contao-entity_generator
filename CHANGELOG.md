@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.0.3] - 2018-08-28
+
+### Fixed
+- localization
+
 ## [4.0.2] - 2018-04-04
 
 ### Fixed

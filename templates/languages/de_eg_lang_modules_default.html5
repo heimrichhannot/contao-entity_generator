@@ -2,8 +2,8 @@
  * Backend modules
  */
 <?php if ($this->moduleGroup == 'new'): ?>
-$GLOBALS['TL_LANG']['MOD']['<?= $this->moduleName ?>'] = ['<?= $this->localizedModuleName ?>', ''];
+$GLOBALS['TL_LANG']['MOD']['<?= $this->moduleName ?>'][0] = '<?= $this->localizedModuleName ?>';
 <?php endif; ?>
 <?php foreach ($this->dcaLocalizations as $strDcaName => $strLocalizedEntityNamePlural): ?>
-$GLOBALS['TL_LANG']['MOD']['<?= $strDcaName ?>'] = ['<?= $strLocalizedEntityNamePlural ?>', ''];
+$GLOBALS['TL_LANG']['MOD']['<?= $strDcaName ?>'][0] = '<?= $strLocalizedEntityNamePlural ?>';
 <?php endforeach; ?>

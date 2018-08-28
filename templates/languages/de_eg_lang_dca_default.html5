@@ -3,13 +3,17 @@ $lang = &$GLOBALS['TL_LANG']['tl_<?= $this->dcaName ?>'];
 /**
  * Fields
  */
-$lang['tstamp'] = ['Änderungsdatum', ''];
+$lang['tstamp'][0] = 'Änderungsdatum';
 <?php if ($this->addTitle): ?>
-$lang['title'] = ['Titel', 'Geben Sie hier bitte den Titel ein.'];
+$lang['title'][0] = 'Titel';
+$lang['title'][1] = 'Geben Sie hier bitte den Titel ein.';
 <?php endif; if ($this->addPublish): ?>
-$lang['published'] = ['Veröffentlichen', 'Wählen Sie diese Option zum Veröffentlichen.'];
-$lang['start'] = ['Anzeigen ab', '<?= $this->localizedEntityName; ?> erst ab diesem Tag auf der Webseite anzeigen.'];
-$lang['stop'] = ['Anzeigen bis', '<?= $this->localizedEntityName; ?> nur bis zu diesem Tag auf der Webseite anzeigen.'];
+$lang['published'][0] = 'Veröffentlichen';
+$lang['published'][1] = 'Wählen Sie diese Option zum Veröffentlichen.';
+$lang['start'][0] = 'Anzeigen ab';
+$lang['start'][1] = '<?= $this->localizedEntityName; ?> erst ab diesem Tag auf der Webseite anzeigen.';
+$lang['stop'][0] = 'Anzeigen bis';
+$lang['stop'][1] = '<?= $this->localizedEntityName; ?> nur bis zu diesem Tag auf der Webseite anzeigen.';
 <?php endif; ?>
 
 /**
@@ -24,9 +28,11 @@ $lang['publish_legend'] = 'Veröffentlichung';
 /**
  * Buttons
  */
-$lang['new'] = ['<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][0], $this->localizedEntityName) ?>', '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][1], $this->localizedEntityName, '%s') ?>'];
+$lang['new'][0] = '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][0], $this->localizedEntityName) ?>';
+$lang['new'][1] = '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator']['new'][1], $this->localizedEntityName, '%s') ?>';
 <?php if ($this->addOperations): ?>
 <?php foreach ($this->operations as $strAct): ?>
-$lang['<?= $strAct ?>'] = ['<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][0], $this->localizedEntityName) ?>', '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][1], $this->localizedEntityName, '%s') ?>'];
+$lang['<?= $strAct ?>'][0] = '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][0], $this->localizedEntityName) ?>';
+$lang['<?= $strAct ?>'][1] = '<?= sprintf($GLOBALS['TL_LANG']['MSC']['entity_generator'][$strAct][1], $this->localizedEntityName, '%s') ?>';
 <?php endforeach; ?>
 <?php endif; ?>
