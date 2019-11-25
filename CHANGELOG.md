@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.0.4] - 2019-11-25
+
+### Fixed
+- icons
+
 ## [4.0.3] - 2018-08-28
 
 ### Fixed
