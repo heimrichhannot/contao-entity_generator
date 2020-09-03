@@ -267,11 +267,11 @@ class tl_<?= $this->dcaName ?> extends \Contao\Backend
             }
 
             /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
-            $session = \System::getContainer()->get('session');
+            $session = \Contao\System::getContainer()->get('session');
 
-            $session = $session->all();
-            $session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $objArchive->fetchEach('id'));
-            $session->replace($session);
+            $sessionData = $session->all();
+            $sessionData['CURRENT']['IDS'] = array_intersect($sessionData['CURRENT']['IDS'], $objArchive->fetchEach('id'));
+            $session->replace($sessionData);
             break;
 
             default:

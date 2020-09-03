@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.0.5] - 2020-09-03
+- fixed session issue in eg_dca_default
+
 ## [4.0.4] - 2019-11-25
 
 ### Fixed
