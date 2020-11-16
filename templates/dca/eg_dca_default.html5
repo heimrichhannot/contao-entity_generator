@@ -22,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = [
         ],
 <?php endif; ?>
         'onsubmit_callback' => [
-            ['huh.utils.dca', 'setDateAdded'],
+            [\HeimrichHannot\UtilsBundle\Dca\DcaUtil::class, 'setDateAdded'],
 <?php if ($this->addOnSubmitCallbacks): ?>
 <?php foreach ($this->onSubmitCallbacks as $intId => $arrCallback): ?>            ['<?= $arrCallback['class'] ?>', '<?= $arrCallback['method'] ?>']<?php if ($intId != count($this->onSubmitCallbacks) - 1): ?>,
 <?php endif; ?><?php endforeach; ?>
@@ -30,7 +30,7 @@ $GLOBALS['TL_DCA']['tl_<?= $this->dcaName ?>'] = [
 <?php endif; ?>
         ],
         'oncopy_callback'   => [
-            ['huh.utils.dca', 'setDateAddedOnCopy'],
+            [\HeimrichHannot\UtilsBundle\Dca\DcaUtil::class, 'setDateAddedOnCopy'],
         ],
         'sql' => [
             'keys' => [

@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.1.0] - 2020-11-16
+- fixed utils reference to make use of class instead of service alias
+
 ## [4.0.5] - 2020-09-03
 - fixed session issue in eg_dca_default
 
