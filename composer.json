@@ -17,7 +17,7 @@
         "issues":"https://github.com/heimrichhannot/contao-entity_generator/issues"
     },
     "require": {
-        "php": "~5.4 || ~7.0",
+        "php": "^5.4 || ^7.0 || ^8.0",
         "contao/core-bundle": "^4.1",
         "contao-community-alliance/composer-plugin": "^3.0",
         "heimrichhannot/contao-haste_plus": "^1.6",

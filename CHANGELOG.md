@@ -1,5 +1,10 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
+
+## [4.2.0] - 2021-09-16
+
+- Added: support for php 8
 
 ## [4.1.0] - 2020-11-16
 - fixed utils reference to make use of class instead of service alias
